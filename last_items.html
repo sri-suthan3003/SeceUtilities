@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusLink - Lost & Found</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+            background: #f8fafc;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar {
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #002147;
+        }
+
+        .nav-logo i {
+            margin-right: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #002147;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #FFD700;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 70vh;
+            background: linear-gradient(135deg, #002147 0%, #1e3a5f 100%);
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Main Actions */
+        .main-actions {
+            padding: 4rem 0;
+            background: white;
+        }
+
+        .actions-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .action-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid #f1f5f9;
+        }
+
+        .action-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: #FFD700;
+        }
+
+        .action-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            color: white;
+            font-size: 2.5rem;
+        }
+
+        .action-card h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+
+        .action-card p {
+            color: #6b7280;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .action-btn {
+            background: #FFD700;
+            color: #002147;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .action-btn:hover {
+            background: #FFC107;
+            transform: translateY(-2px);
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 4rem 0;
+            background: #f9fafb;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-filters {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 0.8rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #FFD700;
+        }
+
+        .search-btn-container {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .search-btn {
+            background: #FFD700;
+            color: #002147;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .search-btn:hover {
+            background: #FFC107;
+            transform: translateY(-2px);
+        }
+
+        /* Items Grid */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 200px;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-content {
+            padding: 1.5rem;
+        }
+
+        .item-category {
+            background: #e0e7ff;
+            color: #4338ca;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .item-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .item-details {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .item-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #002147;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .item-date {
+            color: #9ca3af;
+            font-size: 0.8rem;
+        }
+
+        .contact-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .contact-btn:hover {
+            background: #059669;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 3% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            position: relative;
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .close {
+            position: absolute;
+            right: 1.5rem;
+            top: 1.5rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white;
+            transition: opacity 0.3s ease;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 2rem;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.8rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #FFD700;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            cursor: pointer;
+            background: #f9fafb;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-container:hover {
+            border-color: #FFD700;
+            background: #fffbf0;
+        }
+
+        .file-input-container input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-text {
+            color: #6b7280;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-input-text i {
+            font-size: 2rem;
+            color: #FFD700;
+        }
+
+        .submit-btn {
+            background: #FFD700;
+            color: #002147;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        .submit-btn:hover {
+            background: #FFC107;
+        }
+
+        .no-items {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+
+        .no-items i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #d1d5db;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Leaderboard Styles */
+        .leaderboard-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 2rem auto;
+            max-height: 500px;
+            background: #f5f7fa;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 33, 71, 0.15);
+            border: 2px solid #e5e7eb;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-container:hover {
+            box-shadow: 0 20px 45px rgba(0, 33, 71, 0.2);
+        }
+
+        .leaderboard-header {
+            background: linear-gradient(135deg, #002147 0%, #1e3a5f 100%);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .leaderboard-header h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .leaderboard-header .trophy-icon {
+            color: #FFD700;
+            font-size: 1.4rem;
+        }
+
+        .leaderboard-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .leaderboard-toggle:hover {
+            opacity: 0.7;
+        }
+
+        .leaderboard-content {
+            max-height: 350px;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        .leaderboard-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .leaderboard-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .leaderboard-content::-webkit-scrollbar-thumb {
+            background: #002147;
+            border-radius: 3px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .leaderboard-item:hover {
+            background: #ffffff;
+            transform: translateX(3px);
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .rank-badge.gold {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #002147;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .rank-badge.silver {
+            background: linear-gradient(135deg, #C0C0C0, #A8A8A8);
+            color: #002147;
+            box-shadow: 0 4px 15px rgba(192, 192, 192, 0.3);
+        }
+
+        .rank-badge.bronze {
+            background: linear-gradient(135deg, #CD7F32, #B8860B);
+            color: white;
+            box-shadow: 0 4px 15px rgba(205, 127, 50, 0.3);
+        }
+
+        .rank-badge.regular {
+            background: #002147;
+            color: white;
+        }
+
+        .medal-icon {
+            font-size: 1.2rem;
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: #002147;
+            font-size: 0.95rem;
+            margin-bottom: 0.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .stat-item i {
+            color: #FFD700;
+        }
+
+        .points-badge {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #002147;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .leaderboard-footer {
+            padding: 1rem 1.5rem;
+            background: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+        }
+
+        .leaderboard-footer .view-all-btn {
+            background: #002147;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .leaderboard-footer .view-all-btn:hover {
+            background: #1e3a5f;
+            transform: translateY(-1px);
+        }
+
+        .leaderboard-mobile-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #002147, #1e3a5f);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 33, 71, 0.3);
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-mobile-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 33, 71, 0.4);
+        }
+
+        .leaderboard-mobile-toggle .trophy-icon {
+            color: #FFD700;
+        }
+
+
+
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .leaderboard-container {
+                max-width: 350px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .leaderboard-container {
+                max-width: 100%;
+                max-width: 400px;
+                margin: 2rem 1rem;
+                max-height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .leaderboard-container {
+                margin: 1rem;
+                max-height: 60vh;
+            }
+
+            .leaderboard-mobile-toggle {
+                display: none;
+            }
+
+            @keyframes slideUpIn {
+                from {
+                    transform: translateY(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: white;
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                padding: 2rem 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .nav-toggle.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .actions-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .action-card {
+                padding: 2rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-search"></i>
+                    <span>CampusLink</span>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#home" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#search" class="nav-link">Search Items</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#about" class="nav-link">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#contact" class="nav-link">Contact</a>
+                    </li>
+                </ul>
+                <div class="nav-toggle" id="mobile-menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <h1 class="hero-title">Lost & Found Campus</h1>
+            <p class="hero-subtitle">Help reunite lost items with their owners. Report found items or search for your missing belongings in our secure campus community platform.</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <h3 id="itemsFound">127</h3>
+                    <p>Items Found</p>
+                </div>
+                <div class="stat">
+                    <h3 id="itemsReturned">89</h3>
+                    <p>Successfully Returned</p>
+                </div>
+                <div class="stat">
+                    <h3 id="activeUsers">340</h3>
+                    <p>Active Users</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Actions -->
+    <section class="main-actions">
+        <div class="container">
+            <div class="actions-container">
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <h3>Report Found Item</h3>
+                    <p>Found something on campus? Help us reunite it with its owner by reporting the details here.</p>
+                    <button class="action-btn" onclick="openReportModal()">Report Item</button>
+                </div>
+
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Search Lost Items</h3>
+                    <p>Lost something? Browse through reported found items to see if someone has found your belongings.</p>
+                    <button class="action-btn" onclick="scrollToSearch()">Search Items</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section id="search" class="search-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Search Found Items</h2>
+                <p>Use the filters below to narrow down your search and find your lost items</p>
+            </div>
+
+            <div class="search-filters">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="categoryFilter">Category</label>
+                        <select id="categoryFilter">
+                            <option value="">All Categories</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="accessories">Accessories</option>
+                            <option value="books">Books & Stationery</option>
+                            <option value="sports">Sports Equipment</option>
+                            <option value="personal">Personal Items</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="locationFilter">Location Found</label>
+                        <select id="locationFilter">
+                            <option value="">All Locations</option>
+                            <option value="library">Library</option>
+                            <option value="cafeteria">Cafeteria</option>
+                            <option value="gym">Gymnasium</option>
+                            <option value="classroom">Classroom</option>
+                            <option value="parking">Parking Lot</option>
+                            <option value="dorm">Dormitory</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateFilter">Date Found</label>
+                        <input type="date" id="dateFilter">
+                    </div>
+                    <div class="filter-group">
+                        <label for="searchText">Search Text</label>
+                        <input type="text" id="searchText" placeholder="Search by item name...">
+                    </div>
+                </div>
+                <div class="search-btn-container">
+                    <button class="search-btn" onclick="filterItems()">
+                        <i class="fas fa-search"></i> Search Items
+                    </button>
+                </div>
+            </div>
+
+            <div id="itemsContainer" class="items-grid">
+                <!-- Items will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Leaderboard -->
+    <div id="leaderboard" class="leaderboard-container">
+        <div class="leaderboard-header">
+            <h3>
+                <i class="fas fa-trophy trophy-icon"></i>
+                Top Campus Helpers
+            </h3>
+        </div>
+        <div class="leaderboard-content" id="leaderboardContent">
+            <!-- Leaderboard items will be populated by JavaScript -->
+        </div>
+        <div class="leaderboard-footer">
+            <button class="view-all-btn" onclick="showFullLeaderboard()">
+                <i class="fas fa-trophy"></i> View All
+            </button>
+        </div>
+    </div>
+
+
+
+    <!-- Report Item Modal -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Report Found Item</h2>
+                <span class="close" onclick="closeModal('reportModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="reportForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="itemName">Item Name *</label>
+                            <input type="text" id="itemName" name="itemName" required placeholder="e.g., iPhone 13">
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category *</label>
+                            <select id="category" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="clothing">Clothing</option>
+                                <option value="accessories">Accessories</option>
+                                <option value="books">Books & Stationery</option>
+                                <option value="sports">Sports Equipment</option>
+                                <option value="personal">Personal Items</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="locationFound">Location Found *</label>
+                            <select id="locationFound" name="locationFound" required>
+                                <option value="">Select Location</option>
+                                <option value="library">Library</option>
+                                <option value="cafeteria">Cafeteria</option>
+                                <option value="gym">Gymnasium</option>
+                                <option value="classroom">Classroom</option>
+                                <option value="parking">Parking Lot</option>
+                                <option value="dorm">Dormitory</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateFound">Date Found *</label>
+                            <input type="date" id="dateFound" name="dateFound" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="timeFound">Time Found</label>
+                            <input type="time" id="timeFound" name="timeFound">
+                        </div>
+                        <div class="form-group">
+                            <label for="finderName">Your Name *</label>
+                            <input type="text" id="finderName" name="finderName" required placeholder="Your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="finderEmail">Your Email *</label>
+                            <input type="email" id="finderEmail" name="finderEmail" required placeholder="your.email@university.edu">
+                        </div>
+                        <div class="form-group">
+                            <label for="finderPhone">Your Phone</label>
+                            <input type="tel" id="finderPhone" name="finderPhone" placeholder="(555) 123-4567">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" placeholder="Provide additional details about the item (color, brand, condition, etc.)"></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Item Photo</label>
+                            <div class="file-input-container">
+                                <input type="file" id="itemPhoto" name="itemPhoto" accept="image/*">
+                                <div class="file-input-text">
+                                    <i class="fas fa-camera"></i>
+                                    <span>Click to upload photo</span>
+                                    <small>JPG, PNG files up to 5MB</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Report</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Contact Finder</h2>
+                <span class="close" onclick="closeModal('contactModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="contactInfo">
+                    <!-- Contact information will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample leaderboard data
+        const leaderboardData = [
+            {
+                rank: 1,
+                name: "Sarah Johnson",
+                itemsReported: 15,
+                points: 150,
+                avatar: "SJ"
+            },
+            {
+                rank: 2,
+                name: "Mike Chen",
+                itemsReported: 12,
+                points: 120,
+                avatar: "MC"
+            },
+            {
+                rank: 3,
+                name: "Emma Davis",
+                itemsReported: 10,
+                points: 100,
+                avatar: "ED"
+            },
+            {
+                rank: 4,
+                name: "Alex Rodriguez",
+                itemsReported: 8,
+                points: 80,
+                avatar: "AR"
+            },
+            {
+                rank: 5,
+                name: "Jessica Wilson",
+                itemsReported: 7,
+                points: 70,
+                avatar: "JW"
+            },
+            {
+                rank: 6,
+                name: "David Brown",
+                itemsReported: 6,
+                points: 60,
+                avatar: "DB"
+            },
+            {
+                rank: 7,
+                name: "Lisa Garcia",
+                itemsReported: 5,
+                points: 50,
+                avatar: "LG"
+            },
+            {
+                rank: 8,
+                name: "Ryan Taylor",
+                itemsReported: 4,
+                points: 40,
+                avatar: "RT"
+            }
+        ];
+
+        let foundItems = [
+            {
+                id: 1,
+                name: "iPhone 13 Pro",
+                category: "electronics",
+                location: "library",
+                dateFound: "2024-07-20",
+                timeFound: "14:30",
+                description: "Black iPhone 13 Pro with blue case, found on table in study area",
+                finderName: "Sarah Johnson",
+                finderEmail: "sarah.j@university.edu",
+                finderPhone: "(555) 123-4567",
+                image: null
+            },
+            {
+                id: 2,
+                name: "Red Nike Backpack",
+                category: "accessories",
+                location: "cafeteria",
+                dateFound: "2024-07-19",
+                timeFound: "12:15",
+                description: "Red Nike backpack with laptop compartment, found under table",
+                finderName: "Mike Chen",
+                finderEmail: "mike.c@university.edu",
+                finderPhone: "(555) 234-5678",
+                image: null
+            },
+            {
+                id: 3,
+                name: "AirPods Pro",
+                category: "electronics",
+                location: "gym",
+                dateFound: "2024-07-18",
+                timeFound: "16:45",
+                description: "White AirPods Pro in charging case, found in locker area",
+                finderName: "Emma Davis",
+                finderEmail: "emma.d@university.edu",
+                finderPhone: "(555) 345-6789",
+                image: null
+            },
+            {
+                id: 4,
+                name: "Biology Textbook",
+                category: "books",
+                location: "classroom",
+                dateFound: "2024-07-17",
+                timeFound: "10:30",
+                description: "Campbell Biology 12th Edition with highlighting, name 'Alex' written inside",
+                finderName: "Jessica Wilson",
+                finderEmail: "jessica.w@university.edu",
+                finderPhone: "(555) 456-7890",
+                image: null
+            },
+            {
+                id: 5,
+                name: "Gold Watch",
+                category: "accessories",
+                location: "parking",
+                dateFound: "2024-07-16",
+                timeFound: "18:20",
+                description: "Gold-colored watch with black leather strap, found near car",
+                finderName: "David Brown",
+                finderEmail: "david.b@university.edu",
+                finderPhone: "(555) 567-8901",
+                image: null
+            },
+            {
+                id: 6,
+                name: "Blue Hoodie",
+                category: "clothing",
+                location: "library",
+                dateFound: "2024-07-15",
+                timeFound: "21:00",
+                description: "Navy blue university hoodie, size M, found on chair",
+                finderName: "Lisa Garcia",
+                finderEmail: "lisa.g@university.edu",
+                finderPhone: "(555) 678-9012",
+                image: null
+            }
+        ];
+
+        let filteredItems = [...foundItems];
+
+        // Mobile Navigation Toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.querySelector('.nav-menu');
+
+        mobileMenu.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            }
+        });
+
+        // Modal functions
+        function openReportModal() {
+            document.getElementById('reportModal').style.display = 'block';
+            // Set today's date as default
+            document.getElementById('dateFound').value = new Date().toISOString().split('T')[0];
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function scrollToSearch() {
+            document.getElementById('search').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+
+        // Report form submission
+        document.getElementById('reportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const newItem = {
+                id: foundItems.length + 1,
+                name: formData.get('itemName'),
+                category: formData.get('category'),
+                location: formData.get('locationFound'),
+                dateFound: formData.get('dateFound'),
+                timeFound: formData.get('timeFound'),
+                description: formData.get('description'),
+                finderName: formData.get('finderName'),
+                finderEmail: formData.get('finderEmail'),
+                finderPhone: formData.get('finderPhone'),
+                image: null // In a real app, this would handle file upload
+            };
+
+            foundItems.unshift(newItem);
+            filteredItems = [...foundItems];
+            renderItems();
+            
+            // Update leaderboard if finder exists
+            updateLeaderboard(formData.get('finderName'));
+            
+            // Update stats
+            document.getElementById('itemsFound').textContent = foundItems.length;
+            
+            // Show success message
+            alert('Item reported successfully! It will now appear in the search results.');
+            
+            // Reset form and close modal
+            this.reset();
+            closeModal('reportModal');
+        });
+
+        // File input handling
+        document.getElementById('itemPhoto').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const container = e.target.closest('.file-input-container');
+            const textElement = container.querySelector('.file-input-text span');
+            
+            if (file) {
+                textElement.textContent = `Selected: ${file.name}`;
+                container.style.borderColor = '#10b981';
+                container.style.background = '#ecfdf5';
+            } else {
+                textElement.textContent = 'Click to upload photo';
+                container.style.borderColor = '#d1d5db';
+                container.style.background = '#f9fafb';
+            }
+        });
+
+        // Search and filter functions
+        function filterItems() {
+            const category = document.getElementById('categoryFilter').value;
+            const location = document.getElementById('locationFilter').value;
+            const date = document.getElementById('dateFilter').value;
+            const searchText = document.getElementById('searchText').value.toLowerCase();
+
+            filteredItems = foundItems.filter(item => {
+                const matchesCategory = !category || item.category === category;
+                const matchesLocation = !location || item.location === location;
+                const matchesDate = !date || item.dateFound === date;
+                const matchesText = !searchText || 
+                    item.name.toLowerCase().includes(searchText) ||
+                    item.description.toLowerCase().includes(searchText);
+
+                return matchesCategory && matchesLocation && matchesDate && matchesText;
+            });
+
+            renderItems();
+        }
+
+        // Render items function
+        function renderItems() {
+            const container = document.getElementById('itemsContainer');
+            
+            if (filteredItems.length === 0) {
+                container.innerHTML = `
+                    <div class="no-items">
+                        <i class="fas fa-search"></i>
+                        <h3>No items found</h3>
+                        <p>Try adjusting your search filters or check back later for new items.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredItems.map(item => `
+                <div class="item-card" onclick="showContactInfo(${item.id})">
+                    <div class="item-image">
+                        ${item.image ? `<img src="${item.image}" alt="${item.name}">` : `<i class="fas fa-${getCategoryIcon(item.category)}"></i>`}
+                    </div>
+                    <div class="item-content">
+                        <span class="item-category">${getCategoryLabel(item.category)}</span>
+                        <h3 class="item-title">${item.name}</h3>
+                        <p class="item-details">${item.description}</p>
+                        <div class="item-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${getLocationLabel(item.location)}</span>
+                        </div>
+                        <div class="item-date">
+                            Found on ${formatDate(item.dateFound)} ${item.timeFound ? `at ${item.timeFound}` : ''}
+                        </div>
+                        <button class="contact-btn" onclick="event.stopPropagation(); showContactInfo(${item.id})">
+                            <i class="fas fa-envelope"></i> Contact Finder
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show contact information
+        function showContactInfo(itemId) {
+            const item = foundItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            const contactInfo = document.getElementById('contactInfo');
+            contactInfo.innerHTML = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h3>${item.name}</h3>
+                    <p style="color: #6b7280;">Found at ${getLocationLabel(item.location)} on ${formatDate(item.dateFound)}</p>
+                </div>
+                
+                <div style="background: #f9fafb; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
+                    <h4 style="margin-bottom: 1rem; color: #1f2937;">Finder Contact Information:</h4>
+                    <p><strong>Name:</strong> ${item.finderName}</p>
+                    <p><strong>Email:</strong> <a href="mailto:${item.finderEmail}" style="color: #002147;">${item.finderEmail}</a></p>
+                    ${item.finderPhone ? `<p><strong>Phone:</strong> <a href="tel:${item.finderPhone}" style="color: #002147;">${item.finderPhone}</a></p>` : ''}
+                </div>
+                
+                <div style="background: #ecfdf5; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #10b981;">
+                    <h4 style="margin-bottom: 1rem; color: #065f46;">
+                        <i class="fas fa-shield-alt" style="margin-right: 0.5rem;"></i>
+                        Safety Reminder
+                    </h4>
+                    <p style="color: #047857; margin: 0;">
+                        Always meet in a public, well-lit area on campus. Verify the item belongs to you by describing unique features before meeting.
+                    </p>
+                </div>
+            `;
+
+            document.getElementById('contactModal').style.display = 'block';
+        }
+
+        // Helper functions
+        function getCategoryIcon(category) {
+            const icons = {
+                electronics: 'mobile-alt',
+                clothing: 'tshirt',
+                accessories: 'glasses',
+                books: 'book',
+                sports: 'dumbbell',
+                personal: 'user',
+                other: 'question'
+            };
+            return icons[category] || 'question';
+        }
+
+        function getCategoryLabel(category) {
+            const labels = {
+                electronics: 'Electronics',
+                clothing: 'Clothing',
+                accessories: 'Accessories',
+                books: 'Books & Stationery',
+                sports: 'Sports Equipment',
+                personal: 'Personal Items',
+                other: 'Other'
+            };
+            return labels[category] || 'Other';
+        }
+
+        function getLocationLabel(location) {
+            const labels = {
+                library: 'Library',
+                cafeteria: 'Cafeteria',
+                gym: 'Gymnasium',
+                classroom: 'Classroom',
+                parking: 'Parking Lot',
+                dorm: 'Dormitory',
+                other: 'Other Location'
+            };
+            return labels[location] || 'Other Location';
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Animate stats on scroll
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat h3');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = parseInt(entry.target.textContent);
+                        animateNumber(entry.target, 0, target, 2000);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+
+            stats.forEach(stat => observer.observe(stat));
+        }
+
+        function animateNumber(element, start, end, duration) {
+            const range = end - start;
+            const increment = range / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= end) {
+                    current = end;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, 16);
+        }
+
+        // Leaderboard functions
+        function renderLeaderboard() {
+            const container = document.getElementById('leaderboardContent');
+            
+            container.innerHTML = leaderboardData.map(user => {
+                let rankBadgeClass = 'regular';
+                let rankContent = user.rank;
+                
+                if (user.rank === 1) {
+                    rankBadgeClass = 'gold';
+                    rankContent = '<i class="fas fa-trophy medal-icon"></i>';
+                } else if (user.rank === 2) {
+                    rankBadgeClass = 'silver';
+                    rankContent = '<i class="fas fa-medal medal-icon"></i>';
+                } else if (user.rank === 3) {
+                    rankBadgeClass = 'bronze';
+                    rankContent = '<i class="fas fa-award medal-icon"></i>';
+                }
+                
+                return `
+                    <div class="leaderboard-item" onclick="showUserProfile('${user.name}')">
+                        <div class="rank-badge ${rankBadgeClass}">
+                            ${rankContent}
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">${user.name}</div>
+                            <div class="user-stats">
+                                <div class="stat-item">
+                                    <i class="fas fa-box"></i>
+                                    <span>${user.itemsReported} items</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="points-badge">${user.points} pts</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleLeaderboard() {
+            const container = document.getElementById('leaderboard');
+            const icon = document.getElementById('leaderboardToggleIcon');
+            
+            container.classList.toggle('minimized');
+            
+            if (container.classList.contains('minimized')) {
+                icon.className = 'fas fa-plus';
+            } else {
+                icon.className = 'fas fa-minus';
+            }
+        }
+
+        function toggleMobileLeaderboard() {
+            const container = document.getElementById('leaderboard');
+            container.classList.toggle('mobile-visible');
+        }
+
+        function showUserProfile(userName) {
+            const user = leaderboardData.find(u => u.name === userName);
+            if (!user) return;
+
+            const modal = document.getElementById('contactModal');
+            const contactInfo = document.getElementById('contactInfo');
+            
+            contactInfo.innerHTML = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #002147, #1e3a5f); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 600; margin: 0 auto 1rem;">${user.avatar}</div>
+                    <h3>${user.name}</h3>
+                    <p style="color: #6b7280;">Campus Helper Rank #${user.rank}</p>
+                </div>
+                
+                <div style="background: #f9fafb; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: center;">
+                        <div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #002147;">${user.itemsReported}</div>
+                            <div style="color: #6b7280; font-size: 0.9rem;">Items Reported</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #FFD700;">${user.points}</div>
+                            <div style="color: #6b7280; font-size: 0.9rem;">Total Points</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #ecfdf5; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #10b981;">
+                    <h4 style="margin-bottom: 1rem; color: #065f46;">
+                        <i class="fas fa-heart" style="margin-right: 0.5rem; color: #10b981;"></i>
+                        Community Impact
+                    </h4>
+                    <p style="color: #047857; margin: 0;">
+                        ${user.name} has helped reunite ${user.itemsReported} lost items with their owners, making campus life better for everyone!
+                    </p>
+                </div>
+            `;
+
+            document.querySelector('#contactModal .modal-header h2').textContent = 'Campus Helper Profile';
+            modal.style.display = 'block';
+        }
+
+        function showFullLeaderboard() {
+            const modal = document.getElementById('contactModal');
+            const contactInfo = document.getElementById('contactInfo');
+            
+            contactInfo.innerHTML = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h3><i class="fas fa-trophy" style="color: #FFD700; margin-right: 0.5rem;"></i>Complete Leaderboard</h3>
+                    <p style="color: #6b7280;">All campus helpers ranked by contributions</p>
+                </div>
+                
+                <div style="max-height: 400px; overflow-y: auto;">
+                    ${leaderboardData.map(user => {
+                        let medalIcon = '';
+                        if (user.rank === 1) medalIcon = '🥇';
+                        else if (user.rank === 2) medalIcon = '🥈';
+                        else if (user.rank === 3) medalIcon = '🥉';
+                        
+                        return `
+                            <div style="display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid #e5e7eb; background: ${user.rank <= 3 ? '#f9fafb' : 'white'};">
+                                <div style="width: 40px; text-align: center; font-weight: bold; font-size: 1.1rem;">
+                                    ${medalIcon || user.rank}
+                                </div>
+                                <div style="flex: 1; margin-left: 1rem;">
+                                    <div style="font-weight: 600; color: #002147;">${user.name}</div>
+                                    <div style="font-size: 0.8rem; color: #6b7280;">${user.itemsReported} items reported</div>
+                                </div>
+                                <div style="background: linear-gradient(135deg, #FFD700, #FFA500); color: #002147; padding: 0.3rem 0.8rem; border-radius: 12px; font-weight: 600; font-size: 0.8rem;">
+                                    ${user.points} pts
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                
+                <div style="margin-top: 1.5rem; text-align: center; padding: 1rem; background: #f0f9ff; border-radius: 8px;">
+                    <p style="color: #1e40af; margin: 0; font-size: 0.9rem;">
+                        <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+                        Earn 10 points for each item you report found on campus!
+                    </p>
+                </div>
+            `;
+
+            document.querySelector('#contactModal .modal-header h2').textContent = 'Campus Helpers Leaderboard';
+            modal.style.display = 'block';
+        }
+
+        // Update leaderboard when new item is reported
+        function updateLeaderboard(finderName) {
+            const user = leaderboardData.find(u => u.name === finderName);
+            if (user) {
+                user.itemsReported += 1;
+                user.points += 10;
+
+                // Re-sort leaderboard
+                leaderboardData.sort((a, b) => b.points - a.points);
+
+                // Update ranks
+                leaderboardData.forEach((user, index) => {
+                    user.rank = index + 1;
+                });
+
+                renderLeaderboard();
+            }
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render initial items and leaderboard
+            renderItems();
+            renderLeaderboard();
+            animateStats();
+
+            // Set up real-time search
+            document.getElementById('searchText').addEventListener('input', filterItems);
+            document.getElementById('categoryFilter').addEventListener('change', filterItems);
+            document.getElementById('locationFilter').addEventListener('change', filterItems);
+            document.getElementById('dateFilter').addEventListener('change', filterItems);
+        });
+
+        // Update stats periodically (simulated)
+        setInterval(() => {
+            const itemsFoundEl = document.getElementById('itemsFound');
+            const itemsReturnedEl = document.getElementById('itemsReturned');
+            const activeUsersEl = document.getElementById('activeUsers');
+            
+            // Simulate random small increases
+            if (Math.random() < 0.1) { // 10% chance every interval
+                const currentFound = parseInt(itemsFoundEl.textContent);
+                itemsFoundEl.textContent = currentFound + 1;
+            }
+            
+            if (Math.random() < 0.05) { // 5% chance every interval
+                const currentReturned = parseInt(itemsReturnedEl.textContent);
+                itemsReturnedEl.textContent = currentReturned + 1;
+            }
+            
+            if (Math.random() < 0.15) { // 15% chance every interval
+                const currentUsers = parseInt(activeUsersEl.textContent);
+                activeUsersEl.textContent = currentUsers + Math.floor(Math.random() * 3);
+            }
+        }, 30000); // Every 30 seconds
+    </script>
+</body>
+</html>

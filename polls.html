@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusLink - Polls & Feedback</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #002147 0%, #1e3a5f 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 20px rgba(0,33,71,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            background: #FFD700;
+            color: #002147;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin-badge {
+            background: #FFD700;
+            color: #002147;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #FFD700;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        .nav-tabs {
+            background: white;
+            border-radius: 12px;
+            padding: 0.5rem;
+            margin: 2rem auto;
+            display: flex;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .nav-tab.active {
+            background: #002147;
+            color: white;
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: #f0f2f5;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #002147;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #002147;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #FFD700;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+
+        .options-container {
+            border: 2px dashed #e1e8ed;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .option-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            align-items: center;
+        }
+
+        .option-input input {
+            flex: 1;
+        }
+
+        .btn-remove {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-remove:hover {
+            background: #dc2626;
+        }
+
+        .btn-add-option {
+            background: transparent;
+            border: 2px dashed #FFD700;
+            color: #002147;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-option:hover {
+            background: #FFD700;
+            color: #002147;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #FFD700;
+            color: #002147;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            background: #ffd900;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #002147;
+            border: 2px solid #002147;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            margin-right: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: #002147;
+            color: white;
+        }
+
+        .poll-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .poll-status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #10b981;
+            color: white;
+        }
+
+        .status-closed {
+            background: #6b7280;
+            color: white;
+        }
+
+        .poll-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #002147;
+            margin-bottom: 1rem;
+            padding-right: 5rem;
+        }
+
+        .poll-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .poll-options {
+            margin-bottom: 1.5rem;
+        }
+
+        .poll-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .poll-option:hover {
+            border-color: #FFD700;
+            background: #fffbf0;
+        }
+
+        .poll-option.selected {
+            border-color: #FFD700;
+            background: #fffbf0;
+        }
+
+        .poll-option input {
+            margin: 0;
+        }
+
+        .result-bar {
+            background: #e1e8ed;
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .result-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #FFD700 0%, #ffed4e 100%);
+            border-radius: 4px;
+            transition: width 1s ease;
+            position: relative;
+        }
+
+        .result-percentage {
+            position: absolute;
+            right: 0.5rem;
+            top: -1.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #002147;
+        }
+
+        .vote-count {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-left: auto;
+        }
+
+        .voted-badge {
+            background: #10b981;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            margin-left: 0.5rem;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: #e1e8ed;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .star.active,
+        .star:hover {
+            color: #FFD700;
+        }
+
+        .feedback-success {
+            background: #10b981;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+            margin: 2rem auto;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                text-align: center;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .radio-group {
+                flex-direction: column;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+
+        .admin-only {
+            display: none;
+        }
+
+        .admin-only.show {
+            display: block;
+        }
+
+        .animation-slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-poll"></i>
+                    CampusLink Polls & Feedback
+                </div>
+                <div class="user-info">
+                    <span>Welcome back, Alex Kumar</span>
+                    <span class="admin-badge">Admin</span>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Total Polls</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">2</div>
+                    <div class="stat-label">Active Polls</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">405</div>
+                    <div class="stat-label">Total Votes</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Your Votes</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('vote')">
+                <i class="fas fa-vote-yea"></i>
+                Vote <span style="background: #FFD700; color: #002147; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.8rem; margin-left: 0.5rem;">2</span>
+            </button>
+            <button class="nav-tab" onclick="switchTab('results')">
+                <i class="fas fa-chart-bar"></i>
+                Results
+            </button>
+            <button class="nav-tab" onclick="switchTab('feedback')">
+                <i class="fas fa-comment-alt"></i>
+                Feedback
+            </button>
+            <button class="nav-tab admin-only show" onclick="switchTab('create')">
+                <i class="fas fa-plus"></i>
+                Create
+            </button>
+        </div>
+
+        <!-- Vote Tab -->
+        <div id="vote" class="tab-content active">
+            <div class="card-title">
+                <i class="fas fa-vote-yea"></i>
+                Vote on Active Polls
+                <span style="font-size: 0.8rem; background: #10b981; color: white; padding: 0.25rem 0.5rem; border-radius: 12px; margin-left: 1rem;">2 Active</span>
+            </div>
+
+            <div class="card poll-card animation-slide-in">
+                <div class="poll-status status-active">Active</div>
+                <div class="poll-question">Which event would you like to see next semester?</div>
+                <div class="poll-meta">
+                    <span><i class="fas fa-users"></i> All Students</span>
+                    <span><i class="fas fa-clock"></i> 2 days left to vote</span>
+                    <span><i class="fas fa-check-circle"></i> Single Choice</span>
+                </div>
+                <div class="poll-options" id="poll1-options">
+                    <div class="poll-option" onclick="selectOption(1, 0)">
+                        <input type="radio" name="poll1" value="0">
+                        <span>Tech Fest</span>
+                        <span class="voted-badge" style="display: none;">Your Vote</span>
+                    </div>
+                    <div class="poll-option" onclick="selectOption(1, 1)">
+                        <input type="radio" name="poll1" value="1">
+                        <span>Cultural Night</span>
+                    </div>
+                    <div class="poll-option" onclick="selectOption(1, 2)">
+                        <input type="radio" name="poll1" value="2">
+                        <span>Sports Tournament</span>
+                    </div>
+                    <div class="poll-option" onclick="selectOption(1, 3)">
+                        <input type="radio" name="poll1" value="3">
+                        <span>Job Fair</span>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="submitVote(1)">Submit Vote</button>
+                <div style="margin-top: 1rem; color: #6b7280; font-size: 0.9rem;">
+                    <i class="fas fa-users"></i> 157 total votes
+                </div>
+            </div>
+
+            <div class="card poll-card animation-slide-in">
+                <div class="poll-status status-active">Active</div>
+                <div class="poll-question">What improvements would you like to see in the library?</div>
+                <div class="poll-meta">
+                    <span><i class="fas fa-users"></i> All Students</span>
+                    <span><i class="fas fa-clock"></i> 5 days left to vote</span>
+                    <span><i class="fas fa-check-square"></i> Multiple Choice</span>
+                </div>
+                <div class="poll-options" id="poll2-options">
+                    <div class="poll-option" onclick="selectMultipleOption(2, 0)">
+                        <input type="checkbox" name="poll2" value="0">
+                        <span>Extended hours</span>
+                    </div>
+                    <div class="poll-option" onclick="selectMultipleOption(2, 1)">
+                        <input type="checkbox" name="poll2" value="1">
+                        <span>More study spaces</span>
+                    </div>
+                    <div class="poll-option" onclick="selectMultipleOption(2, 2)">
+                        <input type="checkbox" name="poll2" value="2">
+                        <span>Better WiFi</span>
+                    </div>
+                    <div class="poll-option" onclick="selectMultipleOption(2, 3)">
+                        <input type="checkbox" name="poll2" value="3">
+                        <span>More computers</span>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="submitVote(2)">Submit Vote</button>
+                <div style="margin-top: 1rem; color: #6b7280; font-size: 0.9rem;">
+                    <i class="fas fa-users"></i> 89 total votes
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Tab -->
+        <div id="results" class="tab-content">
+            <div class="card-title">
+                <i class="fas fa-chart-bar"></i>
+                Poll Results
+            </div>
+
+            <div class="card animation-slide-in">
+                <div class="poll-status status-active">Active</div>
+                <div class="poll-question">Which event would you like to see next semester?</div>
+                <div class="poll-meta">
+                    <span><i class="fas fa-calendar"></i> 7/15/2025</span>
+                    <span><i class="fas fa-trophy"></i> Winner: Job Fair</span>
+                </div>
+                
+                <div class="results-grid">
+                    <div class="poll-options">
+                        <div class="poll-option">
+                            <span>Tech Fest</span>
+                            <span class="voted-badge">Your Vote</span>
+                            <span class="vote-count">46 votes</span>
+                            <div class="result-bar">
+                                <div class="result-fill" style="width: 29%">
+                                    <span class="result-percentage">29%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="poll-option">
+                            <span>Cultural Night</span>
+                            <span class="vote-count">32 votes</span>
+                            <div class="result-bar">
+                                <div class="result-fill" style="width: 20%">
+                                    <span class="result-percentage">20%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="poll-option">
+                            <span>Sports Tournament</span>
+                            <span class="vote-count">28 votes</span>
+                            <div class="result-bar">
+                                <div class="result-fill" style="width: 18%">
+                                    <span class="result-percentage">18%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="poll-option">
+                            <span>Job Fair</span>
+                            <span class="vote-count">51 votes</span>
+                            <div class="result-bar">
+                                <div class="result-fill" style="width: 32%">
+                                    <span class="result-percentage">32%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="pieChart" class="pie-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #f0f2f5;">
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+                        <div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #002147;">157</div>
+                            <div style="font-size: 0.9rem; color: #6b7280;">Total Votes</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #002147;">4</div>
+                            <div style="font-size: 0.9rem; color: #6b7280;">Options</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #002147;">32%</div>
+                            <div style="font-size: 0.9rem; color: #6b7280;">Winning %</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #002147;">All Students</div>
+                            <div style="font-size: 0.9rem; color: #6b7280;">Audience</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card animation-slide-in">
+                <div class="poll-status status-closed">Closed</div>
+                <div class="poll-question">Which dining hall has the best food?</div>
+                <div class="poll-meta">
+                    <span><i class="fas fa-calendar"></i> 7/10/2025</span>
+                    <span><i class="fas fa-trophy"></i> Winner: Central Dining</span>
+                </div>
+                
+                <div class="poll-options">
+                    <div class="poll-option">
+                        <span>Central Dining</span>
+                        <span class="vote-count">78 votes</span>
+                        <div class="result-bar">
+                            <div class="result-fill" style="width: 45%">
+                                <span class="result-percentage">45%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="poll-option">
+                        <span>North Campus Cafe</span>
+                        <span class="vote-count">62 votes</span>
+                        <div class="result-bar">
+                            <div class="result-fill" style="width: 36%">
+                                <span class="result-percentage">36%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="poll-option">
+                        <span>Food Court</span>
+                        <span class="vote-count">33 votes</span>
+                        <div class="result-bar">
+                            <div class="result-fill" style="width: 19%">
+                                <span class="result-percentage">19%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Tab -->
+        <div id="feedback" class="tab-content">
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-comment-alt"></i>
+                    Share Your Thoughts
+                    <span style="background: #FFD700; color: #002147; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; margin-left: 1rem;">Post-Event Feedback</span>
+                </div>
+
+                <form id="feedbackForm">
+                    <div class="form-group">
+                        <label class="form-label">Event Name *</label>
+                        <input type="text" class="form-input" placeholder="e.g., Annual Tech Fest 2025, Career Seminar..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Rate the Event *</label>
+                        <div class="star-rating" id="starRating">
+                            <i class="fas fa-star star" data-rating="1"></i>
+                            <i class="fas fa-star star" data-rating="2"></i>
+                            <i class="fas fa-star star" data-rating="3"></i>
+                            <i class="fas fa-star star" data-rating="4"></i>
+                            <i class="fas fa-star star" data-rating="5"></i>
+                        </div>
+                        <div id="ratingText" style="color: #6b7280; margin-top: 0.5rem;">Click to rate</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">What went well? (Optional)</label>
+                        <textarea class="form-input form-textarea" placeholder="Share what you enjoyed most about the event..."></textarea>
+                        <div style="text-align: right; color: #6b7280; font-size: 0.8rem; margin-top: 0.25rem;">0/500 characters</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Suggestions for improvement (Optional)</label>
+                        <textarea class="form-input form-textarea" placeholder="How can we make future events better?"></textarea>
+                        <div style="text-align: right; color: #6b7280; font-size: 0.8rem; margin-top: 0.25rem;">0/500 characters</div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Feedback
+                    </button>
+                </form>
+
+                <div class="feedback-success" id="feedbackSuccess">
+                    <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
+                    Thanks! Your feedback helps us grow.
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Tab (Admin Only) -->
+        <div id="create" class="tab-content admin-only show">
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-plus"></i>
+                    Create a New Poll
+                </div>
+
+                <form id="createPollForm">
+                    <div class="form-group">
+                        <label class="form-label">Poll Question *</label>
+                        <textarea class="form-input" placeholder="Enter your poll question..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Options * (Min 2, Max 5)</label>
+                        <div class="options-container">
+                            <div class="option-input">
+                                <input type="text" class="form-input" placeholder="Option 1..." required>
+                                <span style="color: #6b7280; margin-left: 0.5rem;">1</span>
+                            </div>
+                            <div class="option-input">
+                                <input type="text" class="form-input" placeholder="Option 2..." required>
+                                <span style="color: #6b7280; margin-left: 0.5rem;">2</span>
+                            </div>
+                            <div id="additionalOptions"></div>
+                            <button type="button" class="btn-add-option" onclick="addOption()">
+                                <i class="fas fa-plus"></i>
+                                Add Option
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Target Audience *</label>
+                            <select class="form-input form-select" required>
+                                <option value="">Select audience</option>
+                                <option value="all">All Students</option>
+                                <option value="1st-year">1st Year Students</option>
+                                <option value="2nd-year">2nd Year Students</option>
+                                <option value="3rd-year">3rd Year Students</option>
+                                <option value="4th-year">4th Year Students</option>
+                                <option value="hostel">Hostel Students</option>
+                                <option value="day-scholars">Day Scholars</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Poll Type *</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" name="pollType" value="single" id="single" checked>
+                                    <label for="single">Single Choice</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="pollType" value="multiple" id="multiple">
+                                    <label for="multiple">Multiple Choice</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Duration *</label>
+                            <select class="form-input form-select" required>
+                                <option value="">Select duration</option>
+                                <option value="24h">24 Hours</option>
+                                <option value="3d">3 Days</option>
+                                <option value="1w">1 Week</option>
+                                <option value="2w">2 Weeks</option>
+                                <option value="1m">1 Month</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button type="button" class="btn-secondary" onclick="previewPoll()">
+                            <i class="fas fa-eye"></i>
+                            Preview Poll
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-rocket"></i>
+                            Publish Poll
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Poll Preview -->
+            <div class="card" id="pollPreview" style="display: none;">
+                <div class="card-title">
+                    <i class="fas fa-eye"></i>
+                    Poll Preview
+                </div>
+                <div id="previewContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let optionCount = 2;
+        let currentRating = 0;
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Poll option selection
+        function selectOption(pollId, optionIndex) {
+            const options = document.querySelectorAll(`#poll${pollId}-options .poll-option`);
+            options.forEach((option, index) => {
+                option.classList.remove('selected');
+                if (index === optionIndex) {
+                    option.classList.add('selected');
+                    option.querySelector('input').checked = true;
+                } else {
+                    option.querySelector('input').checked = false;
+                }
+            });
+        }
+
+        function selectMultipleOption(pollId, optionIndex) {
+            const option = document.querySelectorAll(`#poll${pollId}-options .poll-option`)[optionIndex];
+            const checkbox = option.querySelector('input');
+            
+            if (checkbox.checked) {
+                option.classList.remove('selected');
+                checkbox.checked = false;
+            } else {
+                option.classList.add('selected');
+                checkbox.checked = true;
+            }
+        }
+
+        // Submit vote
+        function submitVote(pollId) {
+            const selectedOptions = document.querySelectorAll(`#poll${pollId}-options input:checked`);
+            
+            if (selectedOptions.length === 0) {
+                alert('Please select at least one option before voting.');
+                return;
+            }
+
+            // Show success message and update UI
+            alert('Thank you for your vote! Redirecting to results...');
+            
+            // Add voted badge to selected options
+            selectedOptions.forEach(option => {
+                const badge = option.parentElement.querySelector('.voted-badge');
+                if (badge) {
+                    badge.style.display = 'inline-block';
+                }
+            });
+
+            // Disable the poll after voting
+            const pollCard = selectedOptions[0].closest('.poll-card');
+            const submitButton = pollCard.querySelector('.btn-primary');
+            submitButton.textContent = 'Vote Submitted';
+            submitButton.disabled = true;
+            submitButton.style.opacity = '0.6';
+
+            // Switch to results tab after a short delay
+            setTimeout(() => {
+                switchTab('results');
+                document.querySelector('[onclick="switchTab(\'results\')"]').classList.add('active');
+                document.querySelector('[onclick="switchTab(\'vote\')"]').classList.remove('active');
+            }, 1500);
+        }
+
+        // Star rating
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', function() {
+                currentRating = parseInt(this.dataset.rating);
+                updateStarRating();
+            });
+
+            star.addEventListener('mouseover', function() {
+                const hoverRating = parseInt(this.dataset.rating);
+                highlightStars(hoverRating);
+            });
+        });
+
+        document.getElementById('starRating').addEventListener('mouseleave', function() {
+            updateStarRating();
+        });
+
+        function highlightStars(rating) {
+            document.querySelectorAll('.star').forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function updateStarRating() {
+            highlightStars(currentRating);
+            const ratingTexts = ['Click to rate', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+            document.getElementById('ratingText').textContent = `${currentRating}/5 - ${ratingTexts[currentRating]}`;
+        }
+
+        // Add poll option
+        function addOption() {
+            if (optionCount >= 5) {
+                alert('Maximum 5 options allowed');
+                return;
+            }
+
+            optionCount++;
+            const additionalOptions = document.getElementById('additionalOptions');
+            const newOption = document.createElement('div');
+            newOption.className = 'option-input';
+            newOption.innerHTML = `
+                <input type="text" class="form-input" placeholder="Option ${optionCount}..." required>
+                <button type="button" class="btn-remove" onclick="removeOption(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+                <span style="color: #6b7280; margin-left: 0.5rem;">${optionCount}</span>
+            `;
+            additionalOptions.appendChild(newOption);
+
+            // Hide add button if we reach max options
+            if (optionCount === 5) {
+                document.querySelector('.btn-add-option').style.display = 'none';
+            }
+        }
+
+        function removeOption(button) {
+            button.parentElement.remove();
+            optionCount--;
+            
+            // Show add button if we're below max options
+            if (optionCount < 5) {
+                document.querySelector('.btn-add-option').style.display = 'block';
+            }
+
+            // Renumber remaining options
+            document.querySelectorAll('#additionalOptions .option-input').forEach((option, index) => {
+                const span = option.querySelector('span');
+                const input = option.querySelector('input');
+                span.textContent = index + 3; // Start from 3 since we have 2 default options
+                input.placeholder = `Option ${index + 3}...`;
+            });
+        }
+
+        // Preview poll
+        function previewPoll() {
+            const form = document.getElementById('createPollForm');
+            const formData = new FormData(form);
+            
+            const question = form.querySelector('textarea').value;
+            const options = Array.from(form.querySelectorAll('.option-input input')).map(input => input.value).filter(value => value.trim() !== '');
+            const audience = form.querySelector('select[class*="form-select"]').value;
+            const pollType = form.querySelector('input[name="pollType"]:checked').value;
+            const duration = form.querySelectorAll('select')[1].value;
+
+            if (!question || options.length < 2) {
+                alert('Please fill in the poll question and at least 2 options');
+                return;
+            }
+
+            const previewContent = document.getElementById('previewContent');
+            const inputType = pollType === 'single' ? 'radio' : 'checkbox';
+            
+            previewContent.innerHTML = `
+                <div class="poll-status status-active">Preview</div>
+                <div class="poll-question">${question}</div>
+                <div class="poll-meta">
+                    <span><i class="fas fa-users"></i> ${getAudienceLabel(audience)}</span>
+                    <span><i class="fas fa-clock"></i> ${getDurationLabel(duration)}</span>
+                    <span><i class="fas fa-${pollType === 'single' ? 'check-circle' : 'check-square'}"></i> ${pollType === 'single' ? 'Single' : 'Multiple'} Choice</span>
+                </div>
+                <div class="poll-options">
+                    ${options.map((option, index) => `
+                        <div class="poll-option">
+                            <input type="${inputType}" name="preview-poll" value="${index}">
+                            <span>${option}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="btn-primary" disabled style="opacity: 0.6;">Submit Vote (Preview Only)</button>
+            `;
+
+            document.getElementById('pollPreview').style.display = 'block';
+            document.getElementById('pollPreview').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getAudienceLabel(value) {
+            const labels = {
+                'all': 'All Students',
+                '1st-year': '1st Year Students',
+                '2nd-year': '2nd Year Students',
+                '3rd-year': '3rd Year Students',
+                '4th-year': '4th Year Students',
+                'hostel': 'Hostel Students',
+                'day-scholars': 'Day Scholars'
+            };
+            return labels[value] || 'All Students';
+        }
+
+        function getDurationLabel(value) {
+            const labels = {
+                '24h': '24 hours left',
+                '3d': '3 days left',
+                '1w': '1 week left',
+                '2w': '2 weeks left',
+                '1m': '1 month left'
+            };
+            return labels[value] || 'Active';
+        }
+
+        // Form submissions
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (currentRating === 0) {
+                alert('Please rate the event before submitting');
+                return;
+            }
+
+            // Show success message
+            document.getElementById('feedbackSuccess').style.display = 'block';
+            
+            // Reset form
+            this.reset();
+            currentRating = 0;
+            updateStarRating();
+            
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                document.getElementById('feedbackSuccess').style.display = 'none';
+            }, 5000);
+        });
+
+        document.getElementById('createPollForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const options = Array.from(this.querySelectorAll('.option-input input')).map(input => input.value).filter(value => value.trim() !== '');
+            
+            if (options.length < 2) {
+                alert('Please provide at least 2 options');
+                return;
+            }
+
+            alert('Poll created successfully! It will be live shortly.');
+            
+            // Reset form
+            this.reset();
+            
+            // Reset options to default 2
+            document.getElementById('additionalOptions').innerHTML = '';
+            optionCount = 2;
+            document.querySelector('.btn-add-option').style.display = 'block';
+            
+            // Hide preview
+            document.getElementById('pollPreview').style.display = 'none';
+
+            // Switch to vote tab to show new poll
+            setTimeout(() => {
+                switchTab('vote');
+                document.querySelector('[onclick="switchTab(\'vote\')"]').classList.add('active');
+                document.querySelector('[onclick="switchTab(\'create\')"]').classList.remove('active');
+            }, 1000);
+        });
+
+        // Character counters for textareas
+        document.querySelectorAll('textarea').forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                const maxLength = 500;
+                const currentLength = this.value.length;
+                const counter = this.parentElement.querySelector('div[style*="text-align: right"]');
+                
+                if (counter) {
+                    counter.textContent = `${currentLength}/${maxLength} characters`;
+                    
+                    if (currentLength > maxLength) {
+                        counter.style.color = '#ef4444';
+                    } else {
+                        counter.style.color = '#6b7280';
+                    }
+                }
+            });
+        });
+
+        // Initialize pie chart (simple canvas implementation)
+        function drawPieChart() {
+            const canvas = document.getElementById('pieChart');
+            if (!canvas) return;
+            
+            canvas.width = 200;
+            canvas.height = 200;
+            const ctx = canvas.getContext('2d');
+            
+            const data = [
+                { label: 'Tech Fest', value: 29, color: '#002147' },
+                { label: 'Cultural Night', value: 20, color: '#FFD700' },
+                { label: 'Sports Tournament', value: 18, color: '#10b981' },
+                { label: 'Job Fair', value: 32, color: '#3b82f6' }
+            ];
+            
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 80;
+            
+            let currentAngle = -Math.PI / 2;
+            
+            data.forEach(item => {
+                const sliceAngle = (item.value / 100) * 2 * Math.PI;
+                
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+                ctx.closePath();
+                ctx.fillStyle = item.color;
+                ctx.fill();
+                
+                currentAngle += sliceAngle;
+            });
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            drawPieChart();
+            
+            // Add animation to result bars
+            setTimeout(() => {
+                document.querySelectorAll('.result-fill').forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 500);
+                });
+            }, 1000);
+        });
+
+        // Auto-hide admin sections for non-admin users (demo purposes)
+        // In real implementation, this would be server-side
+        function toggleAdminView() {
+            const isAdmin = true; // This would come from user session
+            const adminElements = document.querySelectorAll('.admin-only');
+            
+            adminElements.forEach(element => {
+                if (isAdmin) {
+                    element.classList.add('show');
+                } else {
+                    element.classList.remove('show');
+                }
+            });
+        }
+
+        // Call on page load
+        toggleAdminView();
+    </script>
+</body>
+</html>

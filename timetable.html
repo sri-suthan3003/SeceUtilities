@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Timetable & Productivity Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: #002147;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0, 33, 71, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .progress-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #FFD700;
+            transition: transform 0.3s ease;
+        }
+
+        .progress-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .progress-card h3 {
+            color: #002147;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FFD700, #F9C900);
+            transition: width 0.8s ease;
+            border-radius: 5px;
+        }
+
+        .progress-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+
+        .timetable-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .timetable-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .timetable-header h2 {
+            color: #002147;
+            font-size: 1.5rem;
+        }
+
+        .leaderboard-btn {
+            background: #FFD700;
+            color: #002147;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-btn:hover {
+            background: #F9C900;
+            transform: scale(1.05);
+        }
+
+        .timetable {
+            display: grid;
+            grid-template-columns: 100px repeat(7, 1fr);
+            gap: 2px;
+            margin-bottom: 30px;
+        }
+
+        .time-header, .day-header {
+            background: #002147;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+
+        .time-slot {
+            background: #002147;
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .timetable-cell {
+            background: #f8f9fa;
+            border: 2px dashed #ddd;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .timetable-cell:hover {
+            border-color: #FFD700;
+            background: #fff9e6;
+            transform: scale(1.02);
+        }
+
+        .timetable-cell.filled {
+            background: linear-gradient(135deg, #FFD700, #F9C900);
+            border-color: #FFD700;
+            color: #002147;
+            font-weight: bold;
+        }
+
+        .timetable-cell .add-icon {
+            font-size: 2rem;
+            color: #ccc;
+            margin-bottom: 5px;
+        }
+
+        .timetable-cell.filled .add-icon {
+            display: none;
+        }
+
+        .cell-content {
+            font-size: 0.9rem;
+        }
+
+        .cell-actions {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            display: none;
+        }
+
+        .timetable-cell.filled:hover .cell-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-btn {
+            background: rgba(0, 33, 71, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .leaderboard {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .leaderboard h3 {
+            color: #002147;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .leaderboard-item.current-user {
+            background: linear-gradient(135deg, #FFD700, #F9C900);
+            color: #002147;
+            font-weight: bold;
+        }
+
+        .rank {
+            background: #002147;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .current-user .rank {
+            background: #002147;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .user-stats {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .total-score {
+            background: #FFD700;
+            color: #002147;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .reflection-section {
+            background: #28a745;
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .reflection-section h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .reflection-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .reflection-day {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reflection-day:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .reflection-day.completed {
+            background: rgba(255, 215, 0, 0.3);
+            border: 2px solid #FFD700;
+        }
+
+        .reflection-day h4 {
+            margin-bottom: 10px;
+        }
+
+        .add-reflection {
+            font-size: 1.5rem;
+            margin-top: 10px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #002147;
+            font-size: 1.3rem;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #002147;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #002147;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #FFD700;
+            outline: none;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #FFD700;
+            color: #002147;
+        }
+
+        .btn-primary:hover {
+            background: #F9C900;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .rating {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .star.active, .star:hover {
+            color: #FFD700;
+        }
+
+        .time-tracker {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .time-tracker h3 {
+            color: #002147;
+            margin-bottom: 15px;
+        }
+
+        .current-time {
+            font-size: 1.2rem;
+            color: #FFD700;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .timetable {
+                grid-template-columns: 80px repeat(7, 1fr);
+                gap: 1px;
+            }
+            
+            .timetable-cell {
+                padding: 10px 5px;
+                font-size: 0.8rem;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .reflection-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎯 Smart Timetable & Productivity Tracker</h1>
+            <p>Plan your week, track your progress, and boost your productivity!</p>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="dashboard">
+            <div class="progress-card">
+                <h3>📅 Timetable Completion</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="timetable-progress" style="width: 0%"></div>
+                </div>
+                <div class="progress-text" id="timetable-text">0%</div>
+            </div>
+            <div class="progress-card">
+                <h3>📝 Reflection Completion</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="reflection-progress" style="width: 0%"></div>
+                </div>
+                <div class="progress-text" id="reflection-text">0%</div>
+            </div>
+            <div class="progress-card">
+                <h3>🎯 Overall Productivity Score</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="productivity-progress" style="width: 0%"></div>
+                </div>
+                <div class="progress-text" id="productivity-text">0%</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Timetable Section -->
+            <div class="timetable-section">
+                <div class="timetable-header">
+                    <h2>📊 Weekly Timetable</h2>
+                    <button class="leaderboard-btn" onclick="toggleLeaderboard()">🏆 View Full Leaderboard</button>
+                </div>
+
+                <!-- Timetable Grid -->
+                <div class="timetable" id="timetable-grid">
+                    <div class="time-header">🕐 Time</div>
+                    <div class="day-header">Mon</div>
+                    <div class="day-header">Tue</div>
+                    <div class="day-header">Wed</div>
+                    <div class="day-header">Thu</div>
+                    <div class="day-header">Fri</div>
+                    <div class="day-header">Sat</div>
+                    <div class="day-header">Sun</div>
+                </div>
+
+                <!-- After Class Reflections -->
+                <div class="reflection-section">
+                    <h3>🌟 After Class Reflections</h3>
+                    <p>Track your daily study progress and productivity</p>
+                    <div class="reflection-grid">
+                        <div class="reflection-day" onclick="openReflectionModal('Monday')">
+                            <h4>Mon</h4>
+                            <div class="add-reflection">+</div>
+                            <small>Add reflection</small>
+                        </div>
+                        <div class="reflection-day" onclick="openReflectionModal('Tuesday')">
+                            <h4>Tue</h4>
+                            <div class="add-reflection">+</div>
+                            <small>Add reflection</small>
+                        </div>
+                        <div class="reflection-day" onclick="openReflectionModal('Wednesday')">
+                            <h4>Wed</h4>
+                            <div class="add-reflection">+</div>
+                            <small>Add reflection</small>
+                        </div>
+                        <div class="reflection-day" onclick="openReflectionModal('Thursday')">
+                            <h4>Thu</h4>
+                            <div class="add-reflection">+</div>
+                            <small>Add reflection</small>
+                        </div>
+                        <div class="reflection-day" onclick="openReflectionModal('Friday')">
+                            <h4>Fri</h4>
+                            <div class="add-reflection">+</div>
+                            <small>Add reflection</small>
+                        </div>
+                        <div class="reflection-day" onclick="openReflectionModal('Saturday')">
+                            <h4>Sat</h4>
+                            <div class="add-reflection">+</div>
+                            <small>Add reflection</small>
+                        </div>
+                        <div class="reflection-day" onclick="openReflectionModal('Sunday')">
+                            <h4>Sun</h4>
+                            <div class="add-reflection">+</div>
+                            <small>Add reflection</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Real-time Clock -->
+                <div class="time-tracker">
+                    <h3>⏰ Current Time</h3>
+                    <div class="current-time" id="current-time"></div>
+                    <p style="text-align: center; color: #666;">Stay on track!</p>
+                </div>
+
+                <!-- Leaderboard -->
+                <div class="leaderboard">
+                    <h3>🏆 Weekly Leaderboard</h3>
+                    <p style="text-align: center; margin-bottom: 20px; color: #666;">Top performers this week</p>
+                    
+                    <div class="leaderboard-item current-user">
+                        <div class="rank">4</div>
+                        <div class="user-info">
+                            <div class="user-name">You</div>
+                            <div class="user-stats">5 tasks • 2 reflections</div>
+                        </div>
+                        <div class="total-score">245</div>
+                    </div>
+                    
+                    <div class="leaderboard-item">
+                        <div class="rank">1</div>
+                        <div class="user-info">
+                            <div class="user-name">Alex Chen 🥇</div>
+                            <div class="user-stats">28 tasks • 7 reflections</div>
+                        </div>
+                        <div class="total-score">580</div>
+                    </div>
+                    
+                    <div class="leaderboard-item">
+                        <div class="rank">2</div>
+                        <div class="user-info">
+                            <div class="user-name">Sarah Kim 🥈</div>
+                            <div class="user-stats">25 tasks • 6 reflections</div>
+                        </div>
+                        <div class="total-score">520</div>
+                    </div>
+                    
+                    <div class="leaderboard-item">
+                        <div class="rank">3</div>
+                        <div class="user-info">
+                            <div class="user-name">Mike Johnson 🥉</div>
+                            <div class="user-stats">22 tasks • 5 reflections</div>
+                        </div>
+                        <div class="total-score">450</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Note Modal -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">📝 Add Class Note</h3>
+                <span class="close" onclick="closeModal('noteModal')">&times;</span>
+            </div>
+            <form id="noteForm">
+                <div class="form-group">
+                    <label for="subject">📚 Subject</label>
+                    <input type="text" id="subject" name="subject" placeholder="e.g., Mathematics, Chemistry" required>
+                </div>
+                <div class="form-group">
+                    <label for="notes">📝 Class Notes</label>
+                    <textarea id="notes" name="notes" placeholder="What did you learn today?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="assignments">🔗 Assignment/Study Links</label>
+                    <input type="url" id="assignments" name="assignments" placeholder="https://example.com/assignment">
+                </div>
+                <div class="form-group">
+                    <label for="reminders">📌 Reminders</label>
+                    <input type="text" id="reminders" name="reminders" placeholder="Quiz next Friday, Study pages 45-67">
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('noteModal')">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="deleteBtn" onclick="deleteNote()" style="display: none;">🗑️ Delete</button>
+                    <button type="submit" class="btn btn-primary">💾 Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Reflection Modal -->
+    <div id="reflectionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="reflection-title">🌟 Daily Reflection</h3>
+                <span class="close" onclick="closeModal('reflectionModal')">&times;</span>
+            </div>
+            <form id="reflectionForm">
+                <div class="form-group">
+                    <label for="timeSpent">⏱️ Time Spent Studying (hours)</label>
+                    <input type="number" id="timeSpent" name="timeSpent" min="0" max="24" step="0.5" placeholder="e.g., 3.5">
+                </div>
+                <div class="form-group">
+                    <label for="studyTopics">📖 What did you study?</label>
+                    <textarea id="studyTopics" name="studyTopics" placeholder="Describe your study topics and key learnings..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>⭐ Productivity Rating</label>
+                    <div class="rating" id="productivityRating">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="goals">🎯 Tomorrow's Goals</label>
+                    <textarea id="goals" name="goals" placeholder="What do you want to accomplish tomorrow?"></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('reflectionModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">💾 Save Reflection</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="leaderboardModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>🏆 Full Leaderboard</h3>
+                <span class="close" onclick="closeModal('leaderboardModal')">&times;</span>
+            </div>
+            <div style="max-height: 400px; overflow-y: auto;">
+                <div class="leaderboard-item">
+                    <div class="rank">1</div>
+                    <div class="user-info">
+                        <div class="user-name">Alex Chen 🥇</div>
+                        <div class="user-stats">28 tasks • 7 reflections • 95% completion</div>
+                    </div>
+                    <div class="total-score">580</div>
+                </div>
+                <div class="leaderboard-item">
+                    <div class="rank">2</div>
+                    <div class="user-info">
+                        <div class="user-name">Sarah Kim 🥈</div>
+                        <div class="user-stats">25 tasks • 6 reflections • 89% completion</div>
+                    </div>
+                    <div class="total-score">520</div>
+                </div>
+                <div class="leaderboard-item">
+                    <div class="rank">3</div>
+                    <div class="user-info">
+                        <div class="user-name">Mike Johnson 🥉</div>
+                        <div class="user-stats">22 tasks • 5 reflections • 78% completion</div>
+                    </div>
+                    <div class="total-score">450</div>
+                </div>
+                <div class="leaderboard-item current-user">
+                    <div class="rank">4</div>
+                    <div class="user-info">
+                        <div class="user-name">You</div>
+                        <div class="user-stats">5 tasks • 2 reflections • 35% completion</div>
+                    </div>
+                    <div class="total-score">245</div>
+                </div>
+                <div class="leaderboard-item">
+                    <div class="rank">5</div>
+                    <div class="user-info">
+                        <div class="user-name">Emma Wilson</div>
+                        <div class="user-stats">18 tasks • 4 reflections • 65% completion</div>
+                    </div>
+                    <div class="total-score">380</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let timetableData = {};
+        let reflectionData = {};
+        let currentCell = null;
+        let currentDay = null;
+
+        // Time slots for the timetable
+        const timeSlots = [
+            '8:00-9:00', '9:00-10:00', '10:00-11:00', '11:00-12:00',
+            '12:00-1:00', '1:00-2:00', '2:00-3:00', '3:00-4:00',
+            '4:00-5:00', '5:00-6:00'
+        ];
+
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+        // Initialize the application
+        function init() {
+            createTimetableGrid();
+            updateProgress();
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            // Load saved data from localStorage
+            loadData();
+            
+            // Setup event listeners
+            setupEventListeners();
+        }
+
+        // Create the timetable grid dynamically
+        function createTimetableGrid() {
+            const grid = document.getElementById('timetable-grid');
+            
+            timeSlots.forEach((timeSlot, timeIndex) => {
+                // Add time slot
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'time-slot';
+                timeDiv.textContent = timeSlot;
+                grid.appendChild(timeDiv);
+                
+                // Add cells for each day
+                days.forEach((day, dayIndex) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'timetable-cell';
+                    cell.onclick = () => openNoteModal(timeIndex, dayIndex);
+                    
+                    const addIcon = document.createElement('div');
+                    addIcon.className = 'add-icon';
+                    addIcon.textContent = '+';
+                    
+                    const content = document.createElement('div');
+                    content.className = 'cell-content';
+                    content.textContent = 'Click to add';
+                    
+                    const actions = document.createElement('div');
+                    actions.className = 'cell-actions';
+                    actions.innerHTML = `
+                        <button class="action-btn" onclick="event.stopPropagation(); editNote(${timeIndex}, ${dayIndex})" title="Edit">✏️</button>
+                        <button class="action-btn" onclick="event.stopPropagation(); deleteNote(${timeIndex}, ${dayIndex})" title="Delete">🗑️</button>
+                    `;
+                    
+                    cell.appendChild(addIcon);
+                    cell.appendChild(content);
+                    cell.appendChild(actions);
+                    cell.id = `cell-${timeIndex}-${dayIndex}`;
+                    
+                    grid.appendChild(cell);
+                });
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Note form submission
+            document.getElementById('noteForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveNote();
+            });
+
+            // Reflection form submission
+            document.getElementById('reflectionForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveReflection();
+            });
+
+            // Star rating system
+            const stars = document.querySelectorAll('.star');
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    updateStarRating(rating);
+                });
+                
+                star.addEventListener('mouseover', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    highlightStars(rating);
+                });
+            });
+
+            document.getElementById('productivityRating').addEventListener('mouseleave', function() {
+                const currentRating = parseInt(this.dataset.currentRating) || 0;
+                highlightStars(currentRating);
+            });
+
+            // Modal close on outside click
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
+                }
+            });
+        }
+
+        // Open note modal
+        function openNoteModal(timeIndex, dayIndex) {
+            currentCell = { timeIndex, dayIndex };
+            const cellId = `cell-${timeIndex}-${dayIndex}`;
+            const timeSlot = timeSlots[timeIndex];
+            const day = days[dayIndex];
+            
+            document.getElementById('modal-title').textContent = `📝 ${day} ${timeSlot}`;
+            
+            // Check if there's existing data
+            const key = `${timeIndex}-${dayIndex}`;
+            if (timetableData[key]) {
+                const data = timetableData[key];
+                document.getElementById('subject').value = data.subject || '';
+                document.getElementById('notes').value = data.notes || '';
+                document.getElementById('assignments').value = data.assignments || '';
+                document.getElementById('reminders').value = data.reminders || '';
+                document.getElementById('deleteBtn').style.display = 'inline-block';
+            } else {
+                // Clear form for new entry
+                document.getElementById('noteForm').reset();
+                document.getElementById('deleteBtn').style.display = 'none';
+            }
+            
+            document.getElementById('noteModal').style.display = 'block';
+        }
+
+        // Save note
+        function saveNote() {
+            if (!currentCell) return;
+            
+            const formData = new FormData(document.getElementById('noteForm'));
+            const data = {
+                subject: formData.get('subject'),
+                notes: formData.get('notes'),
+                assignments: formData.get('assignments'),
+                reminders: formData.get('reminders'),
+                timestamp: new Date().toISOString()
+            };
+            
+            const key = `${currentCell.timeIndex}-${currentCell.dayIndex}`;
+            timetableData[key] = data;
+            
+            updateTimetableCell(currentCell.timeIndex, currentCell.dayIndex, data);
+            updateProgress();
+            saveData();
+            closeModal('noteModal');
+            
+            // Show success feedback
+            showNotification('✅ Note saved successfully!');
+        }
+
+        // Update timetable cell display
+        function updateTimetableCell(timeIndex, dayIndex, data) {
+            const cell = document.getElementById(`cell-${timeIndex}-${dayIndex}`);
+            const addIcon = cell.querySelector('.add-icon');
+            const content = cell.querySelector('.cell-content');
+            
+            if (data && data.subject) {
+                cell.classList.add('filled');
+                addIcon.style.display = 'none';
+                content.innerHTML = `
+                    <strong>${data.subject}</strong>
+                    ${data.notes ? `<br><small>${data.notes.substring(0, 50)}${data.notes.length > 50 ? '...' : ''}</small>` : ''}
+                `;
+            } else {
+                cell.classList.remove('filled');
+                addIcon.style.display = 'block';
+                content.textContent = 'Click to add';
+            }
+        }
+
+        // Delete note
+        function deleteNote(timeIndex = null, dayIndex = null) {
+            if (timeIndex === null && currentCell) {
+                timeIndex = currentCell.timeIndex;
+                dayIndex = currentCell.dayIndex;
+            }
+            
+            if (timeIndex === null || dayIndex === null) return;
+            
+            const key = `${timeIndex}-${dayIndex}`;
+            delete timetableData[key];
+            
+            updateTimetableCell(timeIndex, dayIndex, null);
+            updateProgress();
+            saveData();
+            closeModal('noteModal');
+            
+            showNotification('🗑️ Note deleted successfully!');
+        }
+
+        // Open reflection modal
+        function openReflectionModal(day) {
+            currentDay = day;
+            document.getElementById('reflection-title').textContent = `🌟 ${day} Reflection`;
+            
+            // Check if there's existing reflection data
+            if (reflectionData[day]) {
+                const data = reflectionData[day];
+                document.getElementById('timeSpent').value = data.timeSpent || '';
+                document.getElementById('studyTopics').value = data.studyTopics || '';
+                document.getElementById('goals').value = data.goals || '';
+                updateStarRating(data.rating || 0);
+            } else {
+                // Clear form for new entry
+                document.getElementById('reflectionForm').reset();
+                updateStarRating(0);
+            }
+            
+            document.getElementById('reflectionModal').style.display = 'block';
+        }
+
+        // Save reflection
+        function saveReflection() {
+            if (!currentDay) return;
+            
+            const formData = new FormData(document.getElementById('reflectionForm'));
+            const rating = document.getElementById('productivityRating').dataset.currentRating || 0;
+            
+            const data = {
+                timeSpent: formData.get('timeSpent'),
+                studyTopics: formData.get('studyTopics'),
+                goals: formData.get('goals'),
+                rating: parseInt(rating),
+                timestamp: new Date().toISOString()
+            };
+            
+            reflectionData[currentDay] = data;
+            
+            // Update reflection day display
+            updateReflectionDay(currentDay);
+            updateProgress();
+            saveData();
+            closeModal('reflectionModal');
+            
+            showNotification('✅ Reflection saved successfully!');
+        }
+
+        // Update reflection day display
+        function updateReflectionDay(day) {
+            const reflectionDays = document.querySelectorAll('.reflection-day');
+            const dayIndex = days.indexOf(day);
+            
+            if (dayIndex !== -1 && reflectionDays[dayIndex]) {
+                const dayElement = reflectionDays[dayIndex];
+                if (reflectionData[day]) {
+                    dayElement.classList.add('completed');
+                    const addReflection = dayElement.querySelector('.add-reflection');
+                    const small = dayElement.querySelector('small');
+                    addReflection.textContent = '✓';
+                    small.textContent = 'Completed';
+                } else {
+                    dayElement.classList.remove('completed');
+                    const addReflection = dayElement.querySelector('.add-reflection');
+                    const small = dayElement.querySelector('small');
+                    addReflection.textContent = '+';
+                    small.textContent = 'Add reflection';
+                }
+            }
+        }
+
+        // Star rating functions
+        function updateStarRating(rating) {
+            const ratingContainer = document.getElementById('productivityRating');
+            ratingContainer.dataset.currentRating = rating;
+            highlightStars(rating);
+        }
+
+        function highlightStars(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        // Update progress bars
+        function updateProgress() {
+            // Calculate timetable completion
+            const totalSlots = timeSlots.length * days.length;
+            const filledSlots = Object.keys(timetableData).length;
+            const timetablePercent = Math.round((filledSlots / totalSlots) * 100);
+            
+            // Calculate reflection completion
+            const totalDays = days.length;
+            const reflectedDays = Object.keys(reflectionData).length;
+            const reflectionPercent = Math.round((reflectedDays / totalDays) * 100);
+            
+            // Calculate overall productivity
+            const avgRating = Object.values(reflectionData).reduce((sum, data) => sum + (data.rating || 0), 0) / Math.max(reflectedDays, 1);
+            const productivityPercent = Math.round((timetablePercent + reflectionPercent + (avgRating * 10)) / 3);
+            
+            // Update progress bars
+            updateProgressBar('timetable-progress', 'timetable-text', timetablePercent);
+            updateProgressBar('reflection-progress', 'reflection-text', reflectionPercent);
+            updateProgressBar('productivity-progress', 'productivity-text', productivityPercent);
+        }
+
+        function updateProgressBar(progressId, textId, percent) {
+            document.getElementById(progressId).style.width = percent + '%';
+            document.getElementById(textId).textContent = percent + '%';
+        }
+
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', {
+                hour12: true,
+                hour: 'numeric',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('current-time').textContent = timeString;
+        }
+
+        // Modal functions
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            currentCell = null;
+            currentDay = null;
+        }
+
+        function toggleLeaderboard() {
+            document.getElementById('leaderboardModal').style.display = 'block';
+        }
+
+        // Data persistence
+        function saveData() {
+            localStorage.setItem('timetableData', JSON.stringify(timetableData));
+            localStorage.setItem('reflectionData', JSON.stringify(reflectionData));
+        }
+
+        function loadData() {
+            const savedTimetable = localStorage.getItem('timetableData');
+            const savedReflections = localStorage.getItem('reflectionData');
+            
+            if (savedTimetable) {
+                timetableData = JSON.parse(savedTimetable);
+                // Update timetable display
+                Object.keys(timetableData).forEach(key => {
+                    const [timeIndex, dayIndex] = key.split('-').map(Number);
+                    updateTimetableCell(timeIndex, dayIndex, timetableData[key]);
+                });
+            }
+            
+            if (savedReflections) {
+                reflectionData = JSON.parse(savedReflections);
+                // Update reflection display
+                Object.keys(reflectionData).forEach(day => {
+                    updateReflectionDay(day);
+                });
+            }
+            
+            updateProgress();
+        }
+
+        // Notification system
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #28a745;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            `;
+            notification.textContent = message;
+            
+            // Add animation styles
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize the application when the page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

@@ -1,0 +1,754 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Announcements</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .user-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .toggle-btn {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .toggle-btn:first-child {
+            border-radius: 25px 0 0 25px;
+        }
+
+        .toggle-btn:last-child {
+            border-radius: 0 25px 25px 0;
+        }
+
+        .toggle-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .admin-panel {
+            display: none;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 14px;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .category-filter select {
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .announcements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .announcement-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .announcement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .category-tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .category-events { background: #e3f2fd; color: #1976d2; }
+        .category-exams { background: #fff3e0; color: #f57c00; }
+        .category-holidays { background: #e8f5e8; color: #388e3c; }
+        .category-academic { background: #fce4ec; color: #c2185b; }
+        .category-sports { background: #f3e5f5; color: #7b1fa2; }
+
+        .priority-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .priority-high {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .priority-medium {
+            background: #fff8e1;
+            color: #ef6c00;
+            border: 1px solid #ffecb3;
+        }
+
+        .priority-low {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .timestamp {
+            font-size: 0.8rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .card-content {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .read-status {
+            position: relative;
+        }
+
+        .read-status.unread::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 10px;
+            height: 10px;
+            background: #ff4444;
+            border-radius: 50%;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+
+            .announcements-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .card-meta {
+                justify-content: flex-start;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-bullhorn"></i> Campus Announcements</h1>
+            <p>Stay updated with the latest campus news and events</p>
+        </div>
+
+        <div class="controls">
+            <div class="user-toggle">
+                <div class="toggle-btn active" onclick="switchMode('student')">
+                    <i class="fas fa-user-graduate"></i> Student View
+                </div>
+                <div class="toggle-btn" onclick="switchMode('admin')">
+                    <i class="fas fa-user-shield"></i> Admin Panel
+                </div>
+            </div>
+
+            <!-- Admin Panel -->
+            <div class="admin-panel" id="adminPanel">
+                <h3><i class="fas fa-cog"></i> Create New Announcement</h3>
+                <form id="announcementForm">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" required>
+                            <option value="events">Events</option>
+                            <option value="exams">Exams</option>
+                            <option value="holidays">Holidays</option>
+                            <option value="academic">Academic</option>
+                            <option value="sports">Sports</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="priority">Priority</label>
+                        <select id="priority" name="priority">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="scheduledDate">Scheduled Date (Optional)</label>
+                        <input type="datetime-local" id="scheduledDate" name="scheduledDate">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Create Announcement
+                    </button>
+                </form>
+            </div>
+
+            <!-- Student Filters -->
+            <div class="student-filters" id="studentFilters">
+                <div class="filters">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search announcements...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="category-filter">
+                        <select id="categoryFilter">
+                            <option value="">All Categories</option>
+                            <option value="events">Events</option>
+                            <option value="exams">Exams</option>
+                            <option value="holidays">Holidays</option>
+                            <option value="academic">Academic</option>
+                            <option value="sports">Sports</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="announcements-grid" id="announcementsGrid">
+            <!-- Announcements will be rendered here -->
+        </div>
+    </div>
+
+    <script>
+        // Sample data - in Django, this would come from the backend
+        let announcements = [
+            {
+                id: 1,
+                title: "Mid-Semester Exams Schedule Released",
+                description: "The mid-semester examination schedule has been published. Please check the academic portal for detailed timings and venues. Make sure to bring your student ID and necessary stationery.",
+                category: "exams",
+                priority: "high",
+                timestamp: new Date('2024-03-15T10:30:00'),
+                isRead: false
+            },
+            {
+                id: 2,
+                title: "Annual Sports Festival 2024",
+                description: "Join us for the biggest sporting event of the year! Registration is now open for various indoor and outdoor sports. Prizes worth ₹50,000 to be won!",
+                category: "sports",
+                priority: "medium",
+                timestamp: new Date('2024-03-14T14:20:00'),
+                isRead: true
+            },
+            {
+                id: 3,
+                title: "Holiday Notice - Holi Festival",
+                description: "The college will remain closed on March 25th, 2024 (Monday) on account of Holi festival. Regular classes will resume from March 26th, 2024.",
+                category: "holidays",
+                priority: "low",
+                timestamp: new Date('2024-03-13T09:15:00'),
+                isRead: false
+            },
+            {
+                id: 4,
+                title: "Guest Lecture on AI and Machine Learning",
+                description: "Dr. Sarah Johnson from MIT will be delivering a guest lecture on 'Future of AI in Healthcare' on March 20th at 2:00 PM in the main auditorium. All students are welcome to attend.",
+                category: "events",
+                priority: "medium",
+                timestamp: new Date('2024-03-12T16:45:00'),
+                isRead: true
+            },
+            {
+                id: 5,
+                title: "Library Extension Hours",
+                description: "Starting March 18th, the central library will be open 24/7 during exam period. Additional study spaces have been arranged in the conference halls.",
+                category: "academic",
+                priority: "medium",
+                timestamp: new Date('2024-03-11T11:30:00'),
+                isRead: false
+            }
+        ];
+
+        let currentMode = 'student';
+        let editingId = null;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAnnouncements();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', debounce(filterAnnouncements, 300));
+            
+            // Category filter
+            document.getElementById('categoryFilter').addEventListener('change', filterAnnouncements);
+            
+            // Form submission
+            document.getElementById('announcementForm').addEventListener('submit', handleFormSubmit);
+        }
+
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            // Update toggle buttons
+            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show/hide panels
+            const adminPanel = document.getElementById('adminPanel');
+            const studentFilters = document.getElementById('studentFilters');
+            
+            if (mode === 'admin') {
+                adminPanel.classList.add('active');
+                studentFilters.style.display = 'none';
+            } else {
+                adminPanel.classList.remove('active');
+                studentFilters.style.display = 'block';
+            }
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const announcement = {
+                id: editingId || Date.now(),
+                title: formData.get('title'),
+                description: formData.get('description'),
+                category: formData.get('category'),
+                priority: formData.get('priority'),
+                timestamp: formData.get('scheduledDate') ? new Date(formData.get('scheduledDate')) : new Date(),
+                isRead: false
+            };
+
+            if (editingId) {
+                // Update existing announcement
+                const index = announcements.findIndex(a => a.id === editingId);
+                announcements[index] = announcement;
+                editingId = null;
+            } else {
+                // Add new announcement
+                announcements.unshift(announcement);
+            }
+
+            // Reset form
+            e.target.reset();
+            
+            // Re-render announcements
+            renderAnnouncements();
+            
+            // Show success message (in a real app, this would be a toast notification)
+            alert(editingId ? 'Announcement updated successfully!' : 'Announcement created successfully!');
+        }
+
+        function renderAnnouncements(filteredAnnouncements = null) {
+            const grid = document.getElementById('announcementsGrid');
+            const announcementsToRender = filteredAnnouncements || announcements;
+            
+            if (announcementsToRender.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No announcements found</h3>
+                        <p>There are no announcements matching your criteria.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by timestamp (latest first) and priority
+            const sortedAnnouncements = [...announcementsToRender].sort((a, b) => {
+                const priorityOrder = { high: 3, medium: 2, low: 1 };
+                const priorityDiff = priorityOrder[b.priority] - priorityOrder[a.priority];
+                if (priorityDiff !== 0) return priorityDiff;
+                return new Date(b.timestamp) - new Date(a.timestamp);
+            });
+
+            grid.innerHTML = sortedAnnouncements.map((announcement, index) => `
+                <div class="announcement-card ${announcement.isRead ? 'read' : 'unread'}" 
+                     style="animation-delay: ${index * 0.1}s">
+                    <div class="card-header">
+                        <div>
+                            <h3 class="card-title">${announcement.title}</h3>
+                            <div class="card-meta">
+                                <span class="category-tag category-${announcement.category}">
+                                    ${announcement.category}
+                                </span>
+                                <span class="priority-badge priority-${announcement.priority}">
+                                    ${announcement.priority} priority
+                                </span>
+                            </div>
+                        </div>
+                        <div class="timestamp">
+                            <i class="far fa-clock"></i>
+                            ${formatTimestamp(announcement.timestamp)}
+                        </div>
+                    </div>
+                    
+                    <div class="card-content">
+                        ${announcement.description}
+                    </div>
+                    
+                    <div class="card-actions">
+                        ${currentMode === 'student' ? `
+                            <button class="btn ${announcement.isRead ? 'btn-warning' : 'btn-primary'}" 
+                                    onclick="toggleReadStatus(${announcement.id})">
+                                <i class="far fa-${announcement.isRead ? 'eye-slash' : 'eye'}"></i>
+                                Mark as ${announcement.isRead ? 'Unread' : 'Read'}
+                            </button>
+                        ` : `
+                            <button class="btn btn-warning" onclick="editAnnouncement(${announcement.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteAnnouncement(${announcement.id})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterAnnouncements() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const selectedCategory = document.getElementById('categoryFilter').value;
+            
+            const filtered = announcements.filter(announcement => {
+                const matchesSearch = announcement.title.toLowerCase().includes(searchTerm) || 
+                                    announcement.description.toLowerCase().includes(searchTerm);
+                const matchesCategory = !selectedCategory || announcement.category === selectedCategory;
+                
+                return matchesSearch && matchesCategory;
+            });
+            
+            renderAnnouncements(filtered);
+        }
+
+        function toggleReadStatus(id) {
+            const announcement = announcements.find(a => a.id === id);
+            if (announcement) {
+                announcement.isRead = !announcement.isRead;
+                renderAnnouncements();
+            }
+        }
+
+        function editAnnouncement(id) {
+            const announcement = announcements.find(a => a.id === id);
+            if (announcement) {
+                editingId = id;
+                
+                // Switch to admin mode
+                switchMode('admin');
+                
+                // Populate form
+                document.getElementById('title').value = announcement.title;
+                document.getElementById('description').value = announcement.description;
+                document.getElementById('category').value = announcement.category;
+                document.getElementById('priority').value = announcement.priority;
+                
+                // Scroll to form
+                document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function deleteAnnouncement(id) {
+            if (confirm('Are you sure you want to delete this announcement?')) {
+                announcements = announcements.filter(a => a.id !== id);
+                renderAnnouncements();
+            }
+        }
+
+        function formatTimestamp(timestamp) {
+            const now = new Date();
+            const diff = now - timestamp;
+            const minutes = Math.floor(diff / (1000 * 60));
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            
+            if (minutes < 60) {
+                return `${minutes} minutes ago`;
+            } else if (hours < 24) {
+                return `${hours} hours ago`;
+            } else if (days < 7) {
+                return `${days} days ago`;
+            } else {
+                return timestamp.toLocaleDateString('en-IN', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+    </script>
+</body>
+</html>

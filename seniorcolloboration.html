@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusLink - Skill Exchange Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fdf6e3 0%, #f9f7f3 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #002147 0%, #003366 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0, 33, 71, 0.2);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .logo i {
+            color: #FFD700;
+            font-size: 28px;
+        }
+
+        /* Mission Banner */
+        .mission-banner {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .mission-banner:hover {
+            transform: translateY(-2px);
+        }
+
+        .mission-text {
+            font-size: 18px;
+            font-weight: 500;
+            color: #002147;
+            margin-bottom: 10px;
+        }
+
+        .mission-subtitle {
+            font-size: 14px;
+            color: #003366;
+            opacity: 0.8;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border-color: #FFD700;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #002147;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #FFD700;
+            font-size: 24px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: #002147;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #FFD700;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #002147;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Skill Cards */
+        .skills-container {
+            margin-top: 20px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            font-family: 'Poppins', sans-serif;
+            min-width: 120px;
+        }
+
+        .skill-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #FFD700;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .skill-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .mentor-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .mentor-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #002147;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .mentor-details h4 {
+            color: #002147;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .mentor-badge {
+            background: #FFD700;
+            color: #002147;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .skill-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #002147;
+            margin-bottom: 10px;
+        }
+
+        .skill-description {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .skill-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: #888;
+        }
+
+        .skill-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-book {
+            background: #002147;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-book:hover {
+            background: #003366;
+            transform: translateY(-1px);
+        }
+
+        .btn-contact {
+            background: transparent;
+            color: #002147;
+            border: 2px solid #002147;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-contact:hover {
+            background: #002147;
+            color: white;
+        }
+
+        /* Request Section */
+        .request-section {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4f8 100%);
+            border: 2px dashed #FFD700;
+            text-align: center;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            margin: 50px 0;
+        }
+
+        .testimonials-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 600;
+            color: #002147;
+            margin-bottom: 30px;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 60px;
+            color: #FFD700;
+            font-family: serif;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: #444;
+            margin-bottom: 15px;
+            padding-top: 20px;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: #002147;
+        }
+
+        /* Trending Section */
+        .trending-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .trending-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #002147;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .trending-list {
+            list-style: none;
+        }
+
+        .trending-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .trending-item:last-child {
+            border-bottom: none;
+        }
+
+        .trending-mentor {
+            font-weight: 500;
+            color: #002147;
+        }
+
+        .trending-stat {
+            background: #FFD700;
+            color: #002147;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .search-input {
+                min-width: 100%;
+            }
+
+            .skill-actions {
+                flex-direction: column;
+            }
+
+            .mission-text {
+                font-size: 16px;
+            }
+
+            .section-card {
+                padding: 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .skill-card {
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            margin: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-icon {
+            font-size: 60px;
+            color: #FFD700;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #002147;
+            margin-bottom: 15px;
+        }
+
+        .modal-text {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .modal-close {
+            background: #002147;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>CampusLink</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <i class="fas fa-heart" style="color: #FFD700;"></i>
+                    <span style="font-size: 14px;">Building connections, sharing knowledge</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Mission Banner -->
+        <div class="mission-banner">
+            <div class="mission-text">
+                CampusLink is where seniors help juniors, not for money — but for memories. 💛
+            </div>
+            <div class="mission-subtitle">
+                We grow when we grow together. Join the kindness revolution.
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Offer Skill Section -->
+            <div class="section-card">
+                <h2 class="section-title">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    Offer a Skill – Be Someone's Guide
+                </h2>
+                <form id="offerForm">
+                    <div class="form-group">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-input" placeholder="e.g., Priya Sharma" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Skill You Can Teach</label>
+                        <input type="text" class="form-input" placeholder="e.g., Python Programming, Photoshop" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-input" required>
+                            <option value="">Select a category</option>
+                            <option value="programming">Programming</option>
+                            <option value="design">Design</option>
+                            <option value="languages">Languages</option>
+                            <option value="soft-skills">Soft Skills</option>
+                            <option value="academic">Academic Subjects</option>
+                            <option value="creative">Creative Arts</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-input form-textarea" placeholder="Tell us about your experience and what you can teach..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Preferred Session Duration</label>
+                        <select class="form-input" required>
+                            <option value="">Select duration</option>
+                            <option value="30min">30 minutes</option>
+                            <option value="1hour">1 hour</option>
+                            <option value="flexible">Flexible</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Availability</label>
+                        <input type="text" class="form-input" placeholder="e.g., Weekends, Mon-Wed evenings" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Contact Info</label>
+                        <input type="email" class="form-input" placeholder="your.email@college.edu" required>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-heart"></i> List My Skill
+                    </button>
+                </form>
+            </div>
+
+            <!-- Book Session Section -->
+            <div class="section-card">
+                <h2 class="section-title">
+                    <i class="fas fa-user-graduate"></i>
+                    Book a Learning Session – Learn from a Peer
+                </h2>
+                
+                <div class="filters">
+                    <input type="text" class="form-input search-input" placeholder="Search for a skill..." id="searchInput">
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="programming">Programming</option>
+                        <option value="design">Design</option>
+                        <option value="languages">Languages</option>
+                        <option value="soft-skills">Soft Skills</option>
+                    </select>
+                    <select class="filter-select" id="sortFilter">
+                        <option value="recent">Most Recent</option>
+                        <option value="popular">Most Booked</option>
+                    </select>
+                </div>
+
+                <div class="skills-container" id="skillsContainer">
+                    <!-- Skill cards will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Request Skill Section -->
+        <div class="section-card request-section">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i>
+                Need Help With Something?
+            </h2>
+            <p style="margin-bottom: 20px; color: #666;">
+                Can't find the skill you're looking for? Request it and we'll find a mentor for you!
+            </p>
+            <div style="display: flex; gap: 15px; max-width: 500px; margin: 0 auto;">
+                <input type="text" class="form-input" placeholder="What skill do you need help with?" style="flex: 1;">
+                <button class="submit-btn" style="width: auto; padding: 12px 25px;">
+                    <i class="fas fa-paper-plane"></i> Request Skill
+                </button>
+            </div>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="testimonials">
+            <h2 class="testimonials-title">Stories from Our Community 💫</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        I didn't know Photoshop till my senior taught me in 2 sessions. Best 2 hours of my semester!
+                    </div>
+                    <div class="testimonial-author">– Karthik, 1st Year CSE</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        Learning Python from Arjun was like having a friend explain it. So much better than YouTube tutorials!
+                    </div>
+                    <div class="testimonial-author">– Sneha, 2nd Year IT</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        Teaching on CampusLink has been so rewarding. Seeing juniors grow and succeed makes my day!
+                    </div>
+                    <div class="testimonial-author">– Rohit, 4th Year EEE</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trending Mentors -->
+        <div class="trending-section">
+            <h3 class="trending-title">
+                <i class="fas fa-fire"></i>
+                Trending Mentors This Week
+            </h3>
+            <ul class="trending-list">
+                <li class="trending-item">
+                    <span class="trending-mentor">Ananya - React.js</span>
+                    <span class="trending-stat">12 sessions</span>
+                </li>
+                <li class="trending-item">
+                    <span class="trending-mentor">Vikram - Data Structures</span>
+                    <span class="trending-stat">8 sessions</span>
+                </li>
+                <li class="trending-item">
+                    <span class="trending-mentor">Meera - UI/UX Design</span>
+                    <span class="trending-stat">6 sessions</span>
+                </li>
+                <li class="trending-item">
+                    <span class="trending-mentor">Arjun - Python</span>
+                    <span class="trending-stat">5 sessions</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon">🎓</div>
+            <div class="modal-title">You're now learning from a peer!</div>
+            <div class="modal-text">Let the journey begin. Your mentor will contact you soon.</div>
+            <button class="modal-close" onclick="closeModal()">Awesome!</button>
+        </div>
+    </div>
+
+    <script>
+        // Sample skill data
+        const skillsData = [
+            {
+                id: 1,
+                mentorName: "Ananya Reddy",
+                mentorInitials: "AR",
+                skill: "React.js & Frontend Development",
+                category: "programming",
+                description: "I'll help you build beautiful web applications with React. We'll cover components, state management, and best practices!",
+                duration: "1 hour",
+                availability: "Weekends, Mon-Wed 6-8 PM",
+                badge: "Peer Hero",
+                sessions: 12
+            },
+            {
+                id: 2,
+                mentorName: "Vikram Singh",
+                mentorInitials: "VS",
+                skill: "Data Structures & Algorithms",
+                category: "programming",
+                description: "Let's master DSA together! I'll help you understand complex concepts with simple examples and lots of practice.",
+                duration: "1 hour",
+                availability: "Daily 7-9 PM",
+                badge: "Top Helper",
+                sessions: 8
+            },
+            {
+                id: 3,
+                mentorName: "Meera Patel",
+                mentorInitials: "MP",
+                skill: "UI/UX Design & Figma",
+                category: "design",
+                description: "Design thinking, user research, wireframing, and prototyping - I'll guide you through the entire design process!",
+                duration: "30 min",
+                availability: "Tue, Thu, Sat 4-7 PM",
+                badge: "Design Guru",
+                sessions: 6
+            },
+            {
+                id: 4,
+                mentorName: "Arjun Kumar",
+                mentorInitials: "AK",
+                skill: "Python Programming",
+                category: "programming",
+                description: "From basics to advanced concepts, let's explore Python together. Perfect for beginners and intermediate learners!",
+                duration: "1 hour",
+                availability: "Mon-Fri evenings",
+                badge: "Kindness Mentor",
+                sessions: 5
+            },
+            {
+                id: 5,
+                mentorName: "Priya Sharma",
+                mentorInitials: "PS",
+                skill: "Public Speaking & Confidence",
+                category: "soft-skills",
+                description: "Overcome stage fright and become a confident speaker. I'll share techniques that worked for me in competitions!",
+                duration: "30 min",
+                availability: "Weekends",
+                badge: "Peer Hero",
+                sessions: 4
+            },
+            {
+                id: 6,
+                mentorName: "Rahul Joshi",
+                mentorInitials: "RJ",
+                skill: "Adobe Photoshop & Photo Editing",
+                category: "design",
+                description: "Master photo editing, digital art, and creative design. From basic corrections to advanced compositions!",
+                duration: "1 hour",
+                availability: "Wed, Fri, Sun 3-6 PM",
+                badge: "Creative Genius",
+                sessions: 7
+            }
+        ];
+
+        let filteredSkills = [...skillsData];
+
+        // Render skills
+        function renderSkills() {
+            const container = document.getElementById('skillsContainer');
+            container.innerHTML = '';
+
+            filteredSkills.forEach(skill => {
+                const skillCard = document.createElement('div');
+                skillCard.className = 'skill-card';
+                skillCard.innerHTML = `
+                    <div class="mentor-info">
+                        <div class="mentor-avatar">${skill.mentorInitials}</div>
+                        <div class="mentor-details">
+                            <h4>${skill.mentorName}</h4>
+                            <span class="mentor-badge">${skill.badge}</span>
+                        </div>
+                    </div>
+                    <div class="skill-title">${skill.skill}</div>
+                    <div class="skill-description">${skill.description}</div>
+                    <div class="skill-meta">
+                        <span><i class="fas fa-clock"></i> ${skill.duration}</span>
+                        <span><i class="fas fa-calendar"></i> ${skill.availability.length > 20 ? skill.availability.substring(0, 20) + '...' : skill.availability}</span>
+                    </div>
+                    <div class="skill-actions">
+                        <button class="btn-book" onclick="bookSession(${skill.id})">
+                            <i class="fas fa-calendar-plus"></i> Book Session
+                        </button>
+                        <button class="btn-contact" onclick="contactMentor(${skill.id})">
+                            <i class="fas fa-envelope"></i> Contact
+                        </button>
+                    </div>
+                `;
+                container.appendChild(skillCard);
+            });
+        }
+
+        // Filter and search functionality
+        function filterSkills() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+
+            filteredSkills = skillsData.filter(skill => {
+                const matchesSearch = skill.skill.toLowerCase().includes(searchTerm) || 
+                                    skill.mentorName.toLowerCase().includes(searchTerm) ||
+                                    skill.description.toLowerCase().includes(searchTerm);
+                const matchesCategory = !categoryFilter || skill.category === categoryFilter;
+                return matchesSearch && matchesCategory;
+            });
+
+            // Sort
+            if (sortFilter === 'popular') {
+                filteredSkills.sort((a, b) => b.sessions - a.sessions);
+            } else {
+                filteredSkills.sort((a, b) => b.id - a.id);
+            }
+
+            renderSkills();
+        }
+
+        // Book session
+        function bookSession(skillId) {
+            const skill = skillsData.find(s => s.id === skillId);
+            console.log('Booking session with:', skill.mentorName);
+            document.getElementById('successModal').style.display = 'flex';
+        }
+
+        // Contact mentor
+        function contactMentor(skillId) {
+            const skill = skillsData.find(s => s.id === skillId);
+            alert(`Connecting you with ${skill.mentorName}! They'll receive your contact request.`);
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('successModal').style.display = 'none';
+        }
+
+        // Form submission
+        document.getElementById('offerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for offering to help! Your skill has been added to our marketplace. 💛');
+            this.reset();
+        });
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterSkills);
+        document.getElementById('categoryFilter').addEventListener('change', filterSkills);
+        document.getElementById('sortFilter').addEventListener('change', filterSkills);
+
+        // Close modal when clicking outside
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Initial render
+        renderSkills();
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate skill cards on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all skill cards
+            document.querySelectorAll('.skill-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+
+            // Add hover effects to cards
+            document.addEventListener('mouseover', function(e) {
+                if (e.target.closest('.skill-card')) {
+                    const card = e.target.closest('.skill-card');
+                    card.style.transform = 'translateY(-5px) scale(1.02)';
+                }
+            });
+
+            document.addEventListener('mouseout', function(e) {
+                if (e.target.closest('.skill-card')) {
+                    const card = e.target.closest('.skill-card');
+                    card.style.transform = 'translateY(0) scale(1)';
+                }
+            });
+
+            // Add typing effect to mission banner
+            const missionText = document.querySelector('.mission-text');
+            const originalText = missionText.textContent;
+            missionText.textContent = '';
+            
+            let i = 0;
+            function typeWriter() {
+                if (i < originalText.length) {
+                    missionText.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 50);
+                }
+            }
+            
+            setTimeout(typeWriter, 1000);
+
+            // Add floating animation to testimonial cards
+            document.querySelectorAll('.testimonial-card').forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.2}s`;
+                card.style.animation = 'float 3s ease-in-out infinite';
+            });
+
+            // Add pulse effect to trending stats
+            document.querySelectorAll('.trending-stat').forEach(stat => {
+                setInterval(() => {
+                    stat.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        stat.style.transform = 'scale(1)';
+                    }, 200);
+                }, 3000 + Math.random() * 2000);
+            });
+        });
+
+        // Add floating keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
+            }
+            
+            @keyframes pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+            }
+            
+            .trending-stat {
+                transition: transform 0.2s ease;
+            }
+            
+            .skill-card {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .mission-banner {
+                animation: pulse 4s ease-in-out infinite;
+            }
+            
+            /* Add sparkle effect */
+            .mentor-badge::after {
+                content: '✨';
+                margin-left: 5px;
+                animation: sparkle 2s ease-in-out infinite;
+            }
+            
+            @keyframes sparkle {
+                0%, 100% { opacity: 1; transform: scale(1); }
+                50% { opacity: 0.7; transform: scale(1.2); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('successModal').style.display === 'flex') {
+                closeModal();
+            }
+        });
+
+        // Add search suggestions
+        const searchInput = document.getElementById('searchInput');
+        const suggestions = ['Python', 'React', 'Photoshop', 'Public Speaking', 'Data Structures', 'UI/UX', 'Web Development'];
+        
+        searchInput.addEventListener('focus', function() {
+            if (!this.value) {
+                this.placeholder = suggestions[Math.floor(Math.random() * suggestions.length)] + '...';
+            }
+        });
+
+        // Add success feedback for form submission
+        function showSuccessMessage(message) {
+            const successDiv = document.createElement('div');
+            successDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #4CAF50, #45a049);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3);
+                z-index: 1001;
+                transform: translateX(400px);
+                transition: transform 0.3s ease;
+                font-weight: 500;
+            `;
+            successDiv.innerHTML = `<i class="fas fa-check-circle" style="margin-right: 10px;"></i>${message}`;
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                successDiv.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                successDiv.style.transform = 'translateX(400px)';
+                setTimeout(() => {
+                    document.body.removeChild(successDiv);
+                }, 300);
+            }, 3000);
+        }
+
+        // Update form submission with better feedback
+        document.getElementById('offerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = this.querySelector('input[type="text"]').value;
+            showSuccessMessage(`Thank you ${name}! Your skill is now live on CampusLink 💛`);
+            this.reset();
+        });
+
+        // Add request skill functionality
+        document.querySelector('.request-section button').addEventListener('click', function() {
+            const input = document.querySelector('.request-section input');
+            if (input.value.trim()) {
+                showSuccessMessage(`We're finding a mentor for "${input.value}" - you'll hear from us soon! 🎯`);
+                input.value = '';
+            }
+        });
+
+        // Add live search counter
+        function updateSearchResults() {
+            const resultCount = filteredSkills.length;
+            const container = document.getElementById('skillsContainer');
+            
+            if (resultCount === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        <i class="fas fa-search" style="font-size: 48px; margin-bottom: 20px; opacity: 0.5;"></i>
+                        <h3 style="margin-bottom: 10px;">No mentors found</h3>
+                        <p>Try a different search term or request this skill above!</p>
+                    </div>
+                `;
+            } else {
+                renderSkills();
+                // Add result counter
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput.value.trim()) {
+                    searchInput.style.borderColor = '#4CAF50';
+                    setTimeout(() => {
+                        searchInput.style.borderColor = '#FFD700';
+                    }, 1000);
+                }
+            }
+        }
+
+        // Update filter function to use new search results
+        function filterSkills() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+
+            filteredSkills = skillsData.filter(skill => {
+                const matchesSearch = skill.skill.toLowerCase().includes(searchTerm) || 
+                                    skill.mentorName.toLowerCase().includes(searchTerm) ||
+                                    skill.description.toLowerCase().includes(searchTerm);
+                const matchesCategory = !categoryFilter || skill.category === categoryFilter;
+                return matchesSearch && matchesCategory;
+            });
+
+            // Sort
+            if (sortFilter === 'popular') {
+                filteredSkills.sort((a, b) => b.sessions - a.sessions);
+            } else {
+                filteredSkills.sort((a, b) => b.id - a.id);
+            }
+
+            updateSearchResults();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script.js" def type="module"></script>
+    <title>Campus Utilities - Made Simple</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            padding: 0.5rem 2rem;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            background: #FFD700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5rem;
+            font-weight: bold;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: #FFD700;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid rgba(255, 215, 0, 0.8);
+            color: #FFD700;
+        }
+
+        .btn-outline:hover {
+            background: #FFD700;
+            color: #333;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: #FFD700;
+            color: #333;
+        }
+
+        .btn-primary:hover {
+            background: #E6C200;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section with Parallax */
+        .hero {
+            height: 100vh;
+            background-image: 
+                linear-gradient(135deg, rgba(0, 51, 102, 0.7), rgba(0, 34, 68, 0.8)),
+                url('images/image.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 51, 102, 0.4);
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .hero .highlight {
+            color: #FFD700;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero .btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Stats Section */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 4rem;
+            flex-wrap: wrap;
+            gap: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-item {
+            text-align: center;
+            animation: fadeInUp 1s ease-out 0.5s both;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            opacity: 0.8;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            background: linear-gradient(180deg, #f8f9fa 0%, white 100%);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title .highlight {
+            color: #FFD700;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Utilities Grid */
+        .utilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .utility-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .utility-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+        }
+
+        .utility-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .card-status {
+            margin-left: auto;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-live {
+            background: #E8F5E8;
+            color: #22C55E;
+        }
+
+        .status-active {
+            background: #EBF4FF;
+            color: #3B82F6;
+        }
+
+        .status-popular {
+            background: #F3E8FF;
+            color: #8B5CF6;
+        }
+
+        .status-essential {
+            background: #FEF2F2;
+            color: #EF4444;
+        }
+
+        .status-new {
+            background: #FFF7ED;
+            color: #F97316;
+        }
+
+        .status-trending {
+            background: #F0F4FF;
+            color: #6366F1;
+        }
+
+        .utility-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .utility-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .feature-list li {
+            padding: 0.3rem 0;
+            color: #666;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .feature-list li::before {
+            content: '●';
+            color: #FFD700;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Additional Stats */
+        .additional-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+            padding: 3rem 0;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .additional-stat {
+            text-align: center;
+        }
+
+        .additional-stat .icon {
+            font-size: 2.5rem;
+            color: #FFD700;
+            margin-bottom: 1rem;
+        }
+
+        .additional-stat .number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .additional-stat .label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background: #003366;
+            color: white;
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            grid-column: 1;
+        }
+
+        .footer-brand .logo {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .newsletter {
+            margin-top: 2rem;
+        }
+
+        .newsletter h4 {
+            color: #FFD700;
+            margin-bottom: 1rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .newsletter input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .newsletter input::placeholder {
+            color: #ccc;
+        }
+
+        .newsletter button {
+            background: #FFD700;
+            color: #333;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .footer-section h4 {
+            color: #FFD700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            padding: 0.3rem 0;
+            display: block;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #FFD700;
+        }
+
+        /* CHATBOT STYLES */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #003366;
+            box-shadow: 0 8px 32px rgba(255, 215, 0, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.6);
+        }
+
+        .chatbot-toggle.active {
+            background: #003366;
+            color: #FFD700;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 8px 32px rgba(255, 215, 0, 0.4); }
+            50% { box-shadow: 0 8px 32px rgba(255, 215, 0, 0.8); }
+            100% { box-shadow: 0 8px 32px rgba(255, 215, 0, 0.4); }
+        }
+
+        .chatbot-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 380px;
+            height: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            visibility: hidden;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .chatbot-window.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            visibility: visible;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #003366, #002244);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chatbot-header-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .chatbot-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #FFD700;
+            color: #003366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            font-size: 18px;
+        }
+
+        .chatbot-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .chatbot-status {
+            font-size: 0.8rem;
+            color: #FFD700;
+            display: flex;
+            align-items: center;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22C55E;
+            margin-right: 0.5rem;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .chatbot-messages {
+            height: 320px;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        .message.bot {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message.user {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #FFD700;
+            color: #003366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            background: white;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            max-width: 70%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #003366;
+            font-weight: 500;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 0.3rem;
+            opacity: 0.7;
+        }
+
+        .chatbot-input-area {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .chatbot-input-container {
+            display: flex;
+            gap: 0.8rem;
+            align-items: flex-end;
+        }
+
+        .chatbot-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px;
+            outline: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            resize: none;
+            min-height: 40px;
+            max-height: 80px;
+        }
+
+        .chatbot-input:focus {
+            border-color: #FFD700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+
+        .chatbot-send {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border: none;
+            color: #003366;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .chatbot-send:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+        }
+
+        .chatbot-send:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            background: white;
+            border-radius: 12px;
+            margin-left: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #FFD700;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-action {
+            background: rgba(255, 215, 0, 0.1);
+            color: #003366;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-action:hover {
+            background: #FFD700;
+            color: #003366;
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .utilities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .stats {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .chatbot-window {
+                width: 320px;
+                height: 450px;
+                right: 10px;
+            }
+
+            .chatbot-container {
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        /* Scroll Effects */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 2rem;
+            animation: float 2s ease-in-out infinite;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        /* Parallax utility classes */
+        .parallax-element {
+            will-change: transform;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #FFD700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <nav class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">C</div>
+                Campus Utilities
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#utilities">Utilities</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-outline">👤 Login</a>
+                <a href="login.html" class="btn btn-primary">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Campus Utilities<br><span class="highlight">Made Simple</span></h1>
+            <p>Your one-stop platform for all campus services. From announcements to skill exchange, we've got everything you need for a seamless university experience.</p>
+            <div class="hero-buttons">
+                <a href="#utilities" class="btn btn-primary">Explore Utilities</a>
+                <a href="#about" class="btn btn-outline">Learn More</a>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number">5000+</div>
+                    <div class="stat-label">Active Students</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">🕐</div>
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Service Access</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">💬</div>
+                    <div class="stat-number">1000+</div>
+                    <div class="stat-label">Daily Interactions</div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator" onclick="scrollToUtilities()">⬇️</div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content" id="utilities">
+        <div class="section-title">
+            <h2>Campus <span class="highlight">Utilities</span></h2>
+            <p>Everything you need for your campus life, all in one place. Designed by students, for students.</p>
+        </div>
+
+        <div class="utilities-grid">
+            <!-- Announcements Feed -->
+            <div class="utility-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #3B82F6;">📢</div>
+                    <div class="card-status status-live">Live</div>
+                </div>
+                <h3>Announcements Feed</h3>
+                <p>Stay updated with the latest campus news, events, and important notices from administration.</p>
+                <ul class="feature-list">
+                    <li>Real-time updates</li>
+                    <li>Priority notifications</li>
+                    <li>Category filters</li>
+                </ul>
+                <a href="campus.html" class="btn btn-primary" onclick="showLoading()">Access Now →</a>
+            </div>
+
+            <!-- Lost & Found -->
+            <div class="utility-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #10B981;">🔍</div>
+                    <div class="card-status status-active">Active</div>
+                </div>
+                <h3>Lost & Found</h3>
+                <p>Report lost items or browse found items on campus. Connect with fellow students easily.</p>
+                <ul class="feature-list">
+                    <li>Photo uploads</li>
+                    <li>Location tracking</li>
+                    <li>Direct messaging</li>
+                </ul>
+                <a href="last_items.html" class="btn btn-primary" onclick="showLoading()">Access Now →</a>
+            </div>
+
+            <!-- Mini Timetable Scheduler -->
+            <div class="utility-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #8B5CF6;">📅</div>
+                    <div class="card-status status-popular">Popular</div>
+                </div>
+                <h3>Mini Timetable Scheduler</h3>
+                <p>Organize your academic schedule, set reminders, and never miss a class or deadline.</p>
+                <ul class="feature-list">
+                    <li>Class reminders</li>
+                    <li>Exam schedules</li>
+                    <li>Assignment tracking</li>
+                </ul>
+                <a href="timetable.html" class="btn btn-primary" onclick="showLoading()">Access Now →</a>
+            </div>
+
+            <!-- Hostel Complaint Registration -->
+            <div class="utility-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #EF4444;">🏠</div>
+                    <div class="card-status status-essential">Essential</div>
+                </div>
+                <h3>Hostel Complaint Registration</h3>
+                <p>Submit and track hostel-related complaints. Get timely resolutions for your concerns.</p>
+                <ul class="feature-list">
+                    <li>Ticket tracking</li>
+                    <li>Priority levels</li>
+                    <li>Status updates</li>
+                </ul>
+                <a href="compliants.html" class="btn btn-primary" onclick="showLoading()">Access Now →</a>
+            </div>
+
+            <!-- Skill Exchange Marketplace -->
+            <div class="utility-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #F97316;">🤝</div>
+                    <div class="card-status status-new">New</div>
+                </div>
+                <h3>Skill Exchange Marketplace</h3>
+                <p>Share your skills and learn from others. Connect with students for academic and personal growth.</p>
+                <ul class="feature-list">
+                    <li>Skill matching</li>
+                    <li>Rating system</li>
+                    <li>Session booking</li>
+                </ul>
+                <a href="seniorcolloboration.html" class="btn btn-primary" onclick="showLoading()">Access Now →</a>
+            </div>
+
+            <!-- Campus Forum -->
+            <div class="utility-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #6366F1;">💬</div>
+                    <div class="card-status status-trending">Trending</div>
+                </div>
+                <h3>Tech News & Opportunities Feed</h3>
+                <p>Engage in discussions, ask questions, and share experiences with the campus community.</p>
+                <ul class="feature-list">
+                    <li>Topic threads</li>
+                    <li>Expert answers</li>
+                    <li>Community voting</li>
+                </ul>
+                <a href="innovation.html" class="btn btn-primary" onclick="showLoading()">Access Now →</a>
+            </div>
+
+            <!-- Polls -->
+            <div class="utility-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: #EC4899;">📊</div>
+                    <div class="card-status status-trending">Polls</div>
+                </div>
+                <h3>Campus Polls & Surveys</h3>
+                <p>Participate in campus polls and surveys. Share your opinions and see what others think.</p>
+                <ul class="feature-list">
+                    <li>Real-time voting</li>
+                    <li>Anonymous options</li>
+                    <li>Result analytics</li>
+                </ul>
+                <a href="polls.html" class="btn btn-primary" onclick="showLoading()">Access Now →</a>
+            </div>
+        </div>
+
+        <!-- Additional Stats -->
+        <div class="additional-stats">
+            <div class="additional-stat">
+                <div class="icon">🔔</div>
+                <div class="number">150+</div>
+                <div class="label">Daily Announcements</div>
+            </div>
+            <div class="additional-stat">
+                <div class="icon">🔍</div>
+                <div class="number">95%</div>
+                <div class="label">Items Recovered</div>
+            </div>
+            <div class="additional-stat">
+                <div class="icon">⏰</div>
+                <div class="number">24/7</div>
+                <div class="label">Support Available</div>
+            </div>
+            <div class="additional-stat">
+                <div class="icon">📍</div>
+                <div class="number">3</div>
+                <div class="label">Campus Locations</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="footer-content">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">C</div>
+                        Campus Utilities
+                    </div>
+                    <p>Empowering students with seamless access to campus services. Your gateway to a more connected and efficient university experience.</p>
+                    <div class="newsletter">
+                        <h4>Stay Updated</h4>
+                        <div class="newsletter-form">
+                            <input type="email" placeholder="Enter your email">
+                            <button type="submit">✉️</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Student Portal</a></li>
+                        <li><a href="#">Academic Calendar</a></li>
+                        <li><a href="#">Campus Map</a></li>
+                        <li><a href="#">Emergency Contacts</a></li>
+                        <li><a href="#">IT Support</a></li>
+                        <li><a href="#">Library Services</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Utilities</h4>
+                    <ul>
+                        <li><a href="#">Announcements</a></li>
+                        <li><a href="#">Lost & Found</a></li>
+                        <li><a href="#">Timetable</a></li>
+                        <li><a href="#">Hostel Complaints</a></li>
+                        <li><a href="#">Skill Exchange</a></li>
+                        <li><a href="#">Campus Forum</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">User Guide</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Feedback</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Chatbot -->
+    <div class="chatbot-container">
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <div class="chatbot-header-info">
+                    <div class="chatbot-avatar">🤖</div>
+                    <div class="chatbot-info">
+                        <h3>Campus Assistant</h3>
+                        <div class="chatbot-status">
+                            <div class="status-dot"></div>
+                            Online
+                        </div>
+                    </div>
+                </div>
+                <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+            </div>
+            
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot">
+                    <div class="message-avatar">🤖</div>
+                    <div>
+                        <div class="message-content">
+                            Hi! I'm your Campus Assistant. I can help you with information about campus utilities, answer questions, and guide you through our services. How can I assist you today?
+                        </div>
+                        <div class="message-time" id="welcomeTime"></div>
+                    </div>
+                </div>
+                
+                <div class="quick-actions">
+                    <button class="quick-action" onclick="sendQuickMessage('Tell me about campus utilities')">📚 Campus Utilities</button>
+                    <button class="quick-action" onclick="sendQuickMessage('How do I report a lost item?')">🔍 Lost & Found</button>
+                    <button class="quick-action" onclick="sendQuickMessage('Show me the timetable feature')">📅 Timetable</button>
+                    <button class="quick-action" onclick="sendQuickMessage('Help with complaints')">🏠 Complaints</button>
+                </div>
+            </div>
+            
+            <div class="chatbot-input-area">
+                <div class="chatbot-input-container">
+                    <textarea 
+                        class="chatbot-input" 
+                        id="chatbotInput" 
+                        placeholder="Type your message..." 
+                        rows="1"
+                        onkeypress="handleEnterKey(event)"
+                        oninput="autoResize(this)"
+                    ></textarea>
+                    <button class="chatbot-send" id="chatbotSend" onclick="sendMessage()">
+                        ➤
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <button class="chatbot-toggle" id="chatbotToggle" onclick="toggleChatbot()">
+            💬
+        </button>
+    </div>
+
+    <script>
+        // Chatbot Variables
+        let isTyping = false;
+        const WEBHOOK_URL = 'https://n8n-y3l1.onrender.com/webhook-test/53a2fd41-1c0b-4b0c-a2e8-9bda74916d9a';
+
+        // Initialize welcome message time
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('welcomeTime').textContent = getCurrentTime();
+            animateOnScroll();
+            
+            // Initialize parallax elements
+            const heroContent = document.querySelector('.hero-content');
+            const stats = document.querySelector('.stats');
+            
+            heroContent.classList.add('parallax-element');
+            heroContent.dataset.speed = '0.3';
+            
+            stats.classList.add('parallax-element');
+            stats.dataset.speed = '0.2';
+            
+            // Add hover effects to stat items
+            const statItems = document.querySelectorAll('.stat-item, .additional-stat');
+            statItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05) translateY(-5px)';
+                    this.style.transition = 'all 0.3s ease';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1) translateY(0)';
+                });
+            });
+        });
+
+        // Chatbot Functions
+        function toggleChatbot() {
+            const window = document.getElementById('chatbotWindow');
+            const toggle = document.getElementById('chatbotToggle');
+            
+            if (window.classList.contains('active')) {
+                window.classList.remove('active');
+                toggle.classList.remove('active');
+                toggle.innerHTML = '💬';
+            } else {
+                window.classList.add('active');
+                toggle.classList.add('active');
+                toggle.innerHTML = '×';
+            }
+        }
+
+        function getCurrentTime() {
+            return new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 80) + 'px';
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function sendQuickMessage(message) {
+            const input = document.getElementById('chatbotInput');
+            input.value = message;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatbotInput');
+            const message = input.value.trim();
+            
+            if (!message || isTyping) return;
+            
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+            input.style.height = 'auto';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            try {
+                // Send to webhook
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        timestamp: new Date().toISOString(),
+                        source: 'campus-utilities-chatbot'
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    hideTypingIndicator();
+                    
+                    // Add bot response
+                    const botResponse = data.response || generateLocalResponse(message);
+                    addMessage(botResponse, 'bot');
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                hideTypingIndicator();
+                
+                // Fallback to local response
+                const fallbackResponse = generateLocalResponse(message);
+                addMessage(fallbackResponse, 'bot');
+            }
+        }
+
+        function generateLocalResponse(message) {
+            const msg = message.toLowerCase();
+            
+            if (msg.includes('utility') || msg.includes('utilities') || msg.includes('service')) {
+                return "Our campus utilities include: Announcements Feed 📢, Lost & Found 🔍, Timetable Scheduler 📅, Hostel Complaints 🏠, Skill Exchange 🤝, and Tech News Feed 💬. Which one interests you most?";
+            }
+            
+            if (msg.includes('lost') || msg.includes('found')) {
+                return "The Lost & Found utility helps you report lost items or browse found items on campus. You can upload photos, track locations, and message other students directly. Would you like me to guide you there?";
+            }
+            
+            if (msg.includes('timetable') || msg.includes('schedule')) {
+                return "Our Mini Timetable Scheduler helps you organize your academic schedule, set class reminders, track exam dates, and manage assignments. It's perfect for staying on top of your studies! 📚";
+            }
+            
+            if (msg.includes('complaint') || msg.includes('hostel')) {
+                return "The Hostel Complaint Registration system allows you to submit and track hostel-related issues. You can set priority levels, receive status updates, and get timely resolutions. 🏠";
+            }
+            
+            if (msg.includes('skill') || msg.includes('exchange')) {
+                return "Our Skill Exchange Marketplace connects students for learning and teaching. You can share your expertise, learn new skills, book sessions, and rate experiences. It's great for personal and academic growth! 🎓";
+            }
+            
+            if (msg.includes('announcement') || msg.includes('news')) {
+                return "The Announcements Feed keeps you updated with real-time campus news, events, and important notices. You can filter by categories and get priority notifications for urgent updates. 📢";
+            }
+            
+            if (msg.includes('help') || msg.includes('support')) {
+                return "I'm here to help! I can provide information about any campus utility, guide you through features, or answer questions about our services. What would you like to know more about?";
+            }
+            
+            if (msg.includes('poll') || msg.includes('survey')) {
+                return "Our Campus Polls & Surveys feature lets you participate in real-time voting, choose anonymous options, and view result analytics. It's a great way to share your voice in campus decisions! 📊";
+            }
+            
+            return "Thanks for your message! I can help you with information about our campus utilities, guide you through features, or answer any questions you have. Feel free to ask about announcements, lost & found, timetables, complaints, skill exchange, or any other campus service. How can I assist you? 😊";
+        }
+
+        function addMessage(content, sender) {
+            const messagesContainer = document.getElementById('chatbotMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const time = getCurrentTime();
+            
+            if (sender === 'bot') {
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">🤖</div>
+                    <div>
+                        <div class="message-content">${content}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-content">${content}</div>
+                `;
+            }
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            isTyping = true;
+            const messagesContainer = document.getElementById('chatbotMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="typing-indicator">
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            isTyping = false;
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        // Original Website Functions
+        function scrollToUtilities() {
+            document.getElementById('utilities').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Header scroll effect with transparency
+        window.addEventListener('scroll', function() {
+            parallaxEffect();
+            
+            const header = document.getElementById('header');
+            const scrolled = window.scrollY;
+            
+            if (scrolled > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+                header.querySelector('.logo').style.color = '#333';
+                header.querySelectorAll('.nav-links a').forEach(link => {
+                    link.style.color = '#333';
+                });
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.1)';
+                header.style.boxShadow = 'none';
+                header.querySelector('.logo').style.color = 'white';
+                header.querySelectorAll('.nav-links a').forEach(link => {
+                    link.style.color = 'white';
+                });
+            }
+        });
+
+        // Parallax effect
+        function parallaxEffect() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.parallax-element');
+            
+            parallaxElements.forEach(element => {
+                const speed = element.dataset.speed || 0.5;
+                const yPos = -(scrolled * speed);
+                element.style.transform = `translateY(${yPos}px)`;
+            });
+        }
+
+        // Loading animation
+        function showLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'flex';
+            
+            setTimeout(() => {
+                loading.style.display = 'none';
+                alert('Feature coming soon! This would redirect to the specific utility.');
+            }, 2000);
+        }
+
+        // Animate cards on scroll
+        function animateOnScroll() {
+            const cards = document.querySelectorAll('.utility-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInUp 0.6s ease-out';
+                    }
+                });
+            });
+
+            cards.forEach(card => observer.observe(card));
+        }
+
+        // Newsletter subscription
+        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input').value;
+            if (email) {
+                alert('Thank you for subscribing! We\'ll keep you updated.');
+                this.querySelector('input').value = '';
+            }
+        });
+
+        // Mobile menu toggle (for future enhancement)
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+    </script>
+    
+</body>
+</html>
